@@ -1,0 +1,58 @@
+.login {
+    background-color: $bg-c3-color;
+    max-width: 70%;
+    margin: 0 auto;
+    padding: 70px;
+    margin-top: 150px;
+    border-radius: 20px;
+
+    h2 {
+        font-size: 35px;
+    }
+
+    .form {
+
+        .form-group {
+            margin-bottom: 25px;
+
+            p {
+                text-align: left;
+                margin: 0;
+                font-size: 16px;
+            }
+
+
+            .loginBtn {
+                // background: #a64bf4;
+                background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(56,56,140,1) 0%, rgba(0,212,255,1) 100%);
+                background-size: 300%;
+                padding: 10px 30px;
+                background-position: center;
+                border: none;
+                transition: 0.7s;
+
+                 &:hover {
+                    background-position: right;
+                }
+            }
+
+        }
+    }
+
+    .registerBtn {
+        background-color: $bg-c4-color;
+        border: none;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 15px;
+        transition: 0.5s;
+        &:hover {
+            box-shadow: -3px 7px 10px -4px rgba(0,0,0,0.56);
+        }
+    }
+
+    a {
+        text-decoration: none;
+        color: $text-c2-color;
+    }
+}

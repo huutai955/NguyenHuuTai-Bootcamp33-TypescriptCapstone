@@ -1,0 +1,27 @@
+$text-c1-color: #000000;
+$text-c2-color: #ffffff;
+$text-c3-color: #333;
+$text-c4-color: #c7c7c7;
+
+
+
+
+$bg-c1-color: #fafafa;
+$bg-c2-color: #c7c7c7;
+$bg-c3-color: #e3f2fd;
+$bg-c4-color: #66bb6a;
+$bg-c5-color: #0069c0;
+$bg-c6-color: #6ec6ff;
+
+
+@mixin btnSignup {
+    background: -webkit-linear-gradient(right, #00dbde, #fc00ff, #00dbde, #fc00ff);
+    padding: 15px 60px;
+    background-position: center;
+    background-size: 200%;
+    background-repeat: no-repeat;
+    border: none;
+    color: $text-c2-color;
+    text-transform: uppercase;
+    border-radius: 10px;
+}

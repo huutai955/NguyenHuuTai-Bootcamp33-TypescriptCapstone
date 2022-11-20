@@ -1,0 +1,62 @@
+@import '../themes/variable';
+
+
+
+@keyframes showDasboard {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+.row {
+
+    .col-2 {
+
+        .menu {
+ 
+           .row {
+            padding: 0;
+            margin: 0;
+            flex-wrap: nowrap;
+            .col-2 {
+                background-color: $bg-c5-color;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 0;
+                width: 85px;
+                height: 100vh;
+                margin: 0;
+
+                img {
+                    width: 45px;
+                    margin: 30px 0;
+                    border-radius: 5px;
+                }
+
+                i {
+                    font-size: 25px;
+                    margin-bottom: 20px;
+                    color: $text-c1-color;
+                    cursor: pointer;
+                }
+
+            }
+
+            .col-10 {
+                width: 73%;
+                padding: 0 10px;
+                background-color: $bg-c6-color;
+                display: none;
+            }
+
+            .showDasboard {
+                display: block;
+                animation: showDasboard 0.8s normal;
+            }
+           }
+        }
+    }
+}

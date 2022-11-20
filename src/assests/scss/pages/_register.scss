@@ -1,0 +1,59 @@
+.register {
+    text-align: center;
+    display: block;
+    width: 100% !important;
+    background-image: url('../../img/background.webp');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100vh;
+    padding: 100px 0;
+
+    .container {
+
+        form {
+            background-color: $bg-c1-color;
+            padding: 50px;
+            border-radius: 20px;
+
+            h2 {
+                color: $text-c3-color;
+                font-size: 40px;
+                font-weight: 700;
+            }
+
+            .row {
+                margin-top: 50px;
+
+                .col-6 {
+                    padding: 30px;
+
+                    .form-group {
+                        margin-bottom: 30px;
+
+                        p {
+                            text-align: left;
+                            margin: 0;
+                        }
+                    }
+                    a {
+                        text-align: left;
+                        display: block;
+                    }
+                }
+            }
+
+            .form-group {
+
+                .btnSignup {
+                    @include btnSignup;
+                    transition: 0.5s;
+
+                    &:hover {
+                        background-position: right;
+                    }
+                }
+            }
+        }
+    }
+}
