@@ -9,9 +9,9 @@ import EditProject from '../../components/EditProject/EditProject';
 import swal from 'sweetalert';
 import { assignUserProject, getUserAPI, removeUserProjectAPI } from '../../redux/reducers/userReducer';
 import { setVisible } from '../../redux/reducers/modalReducer';
-import { Formik } from 'formik';
 import { NavLink } from 'react-router-dom';
-import '../../assests/scss/pages/_home.scss'
+import '../../assests/scss/pages/_homemobile.scss';
+import EditProjectMobile from '../../components/EditProject/EditProjectMobile';
 import { history, settings } from '../../util/config';
 
 type Props = {}
@@ -86,12 +86,6 @@ export default function Home({ }: Props) {
 
   const columns: ColumnsType<DataType> = [
     {
-      title: 'ID',
-      dataIndex: 'id',
-      key: 'id',
-      sorter: (a, b) => a.id - b.id,
-    },
-    {
       title: 'Project Name',
       render: (value, record): any => {
         return <NavLink to={`/task/${record.id}`}>{record.projectName}</NavLink>
@@ -99,28 +93,9 @@ export default function Home({ }: Props) {
       sorter: (a, b) => a.projectName.length - b.projectName.length,
     },
     {
-      title: 'Category',
-      dataIndex: 'categoryName',
-      key: 'categoryName',
-      responsive: ['lg'],
-      sorter: (a, b) => a.categoryName.length - b.categoryName.length,
-    },
-    {
-      title: 'Creator',
-      key: 'creator',
-      responsive: ['lg'],
-      render: (value, record, index): any => {
-        return <Tag color='green' key={index}>{record.creator.name}</Tag>
-      },
-      sorter: (a, b) => a.creator.name.length - b.creator.name.length,
-
-    },
-    {
       title: 'Member',
-      key: 'member',
       render: (value, record, index): any => {
-        const renderTbodyEditUser = () => {
-
+        const renderTbody = () => {
           return record.members.map((member, index) => {
             return <tbody key={index}>
               <tr>
@@ -138,24 +113,20 @@ export default function Home({ }: Props) {
               </tr>
             </tbody>
           })
-
         }
-        const contentEditUser = (
+        const content = (
           <table>
-            <>
-              <thead>
-                <tr>
-                  <th style={{ padding: 15 }}>ID</th>
-                  <th style={{ padding: 15 }}>Avatar</th>
-                  <th style={{ padding: 15 }}>Name</th>
-                </tr>
-              </thead>
-              {renderTbodyEditUser()}
-            </>
+            <thead>
+              <tr>
+                <th style={{ padding: 15 }}>ID</th>
+                <th style={{ padding: 15 }}>Avatar</th>
+                <th style={{ padding: 15 }}>Name</th>
+              </tr>
+            </thead>
+            {renderTbody()}
           </table >
         )
         return <div style={{ display: 'flex', alignItems: 'center' }}>
-          {/* Render Avatar */}
           <Avatar.Group style={{ alignItems: 'center', marginRight: 5 }}
             maxCount={2}
             size="large"
@@ -165,13 +136,9 @@ export default function Home({ }: Props) {
             </Tooltip>
           })}
           </Avatar.Group>
-
-          {/* Render edit user button */}
-          {record.members.length >= 1 ? <Popover placement="bottom" title={'User List'} content={contentEditUser} trigger="click">
-            <span style={{ color: '#1e88e5', fontSize: 20, cursor: 'pointer', marginRight: 8 }}><EditOutlined /></span>
-          </Popover> : <></>}
-
-          {/* Render add user button */}
+          {record.members.length >= 1 ? <Popover placement="bottom" title={'User List'} content={content} trigger="click">
+            <span><EditOutlined  style={{ fontSize: 15, color: '#1e88e5' }} /></span>
+          </Popover> : ''}
           <Popover placement="bottom" title={'User List'} content={() => {
             return <AutoComplete style={{ width: '100%' }} onSearch={(value) => {
               if (searchRef.current) {
@@ -180,7 +147,7 @@ export default function Home({ }: Props) {
               searchRef.current = setTimeout(() => {
                 const action = getUserAPI(value);
                 dispatch(action);
-              }, 200)
+              }, 500)
             }}
               options={arrGetUser?.map((user) => {
                 return { label: user.name, value: user.userId.toString() }
@@ -196,20 +163,21 @@ export default function Home({ }: Props) {
               }}
             />
           }} trigger="click">
-            <span style={{ color: '#e53935', fontSize: 20, cursor: 'pointer',}}><UserAddOutlined /></span>
+            <span style={{ fontSize: 15, color: '#e53935' }}><UserAddOutlined /></span>
           </Popover>
         </div>
-      }}
-    ,
+      },
+
+    },
     {
       title: 'Action',
       key: 'action',
       render: (value, record): any => {
-        return <Space>
+        return <div className='text-center'>
           <span onClick={() => {
             showDrawer();
             getDetailProject(record.id);
-          }}><EditOutlined style={{ fontSize: 20, cursor: 'pointer', color: '#1e88e5' }} /></span>
+          }}><EditOutlined style={{ fontSize: 15, color: '#1e88e5' }} /></span>
           <Popconfirm
             title="Are you sure to delete this task?"
             okText="Yes"
@@ -218,9 +186,9 @@ export default function Home({ }: Props) {
               deleteProject(record.id);
             }}
           >
-            <span><DeleteOutlined style={{ fontSize: 20, cursor: 'pointer', color: '#e53935' }} /></span>
+            <span><DeleteOutlined style={{ fontSize: 15, color: '#e53935' }} /></span>
           </Popconfirm>
-        </Space>
+        </div>
       }
     },
   ];
@@ -228,12 +196,10 @@ export default function Home({ }: Props) {
 
 
   return (
-    <div className="home" style={{paddingTop: 70}}>
+    <div className="homeMobile">
       <div className='container'>
-        <p style={{fontWeight: 700}}>Jira Project / <span style={{color: '#e53935'}}>Projects</span></p>
-        <h2>Projects</h2>
-        <Table columns={columns} rowKey={"id"} dataSource={data} />
-        <EditProject />
+        <Table columns={columns} style={{ padding: 0 }} rowKey={"id"} dataSource={data} />
+        <EditProjectMobile />
       </div >
     </div>
   )

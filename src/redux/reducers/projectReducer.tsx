@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import swal from 'sweetalert';
-import { ACCESSTOKEN, http } from '../../util/config';
+import { ACCESSTOKEN, http, show } from '../../util/config';
 import { DispatchType } from '../configStore';
+import { getUser } from './userReducer';
 
 
 export interface Project {
@@ -29,7 +30,7 @@ export interface Member {
 
 export interface DetailProject {
     lstTask: LstTask[];
-    members: Member[];
+    members: Member[] | getUser[];
     creator: Creator;
     id: number;
     projectName: string;
@@ -66,26 +67,20 @@ export interface CategoryProject {
 export interface ProjectCreate {
     projectName: string;
     description: string;
-    categoryId:  number;
+    categoryId: number;
 }
 
 interface ProjectState {
     arrProject: Project[],
-    detailProject: DetailProject | null | undefined ,
-    idDeleted: number | null,
-    messageUpdate: string | null,
+    detailProject: DetailProject | null | undefined,
     arrCategory: CategoryProject[] | null | undefined | any,
-    messageCreate: string
 }
 
 
 const initialState: ProjectState = {
     arrProject: [],
     detailProject: null,
-    idDeleted: null,
-    messageUpdate: '',
     arrCategory: [],
-    messageCreate: ''
 }
 
 const projectReducer = createSlice({
@@ -103,27 +98,11 @@ const projectReducer = createSlice({
         setDetailProject: (state: ProjectState, action: PayloadAction<DetailProject>) => {
             const detail: DetailProject = action.payload;
             state.detailProject = { ...detail };
-        },
-        setMessageDelete: (state: ProjectState, action: PayloadAction<number>) => {
-            const numberDelete: number = action.payload;
-            state.idDeleted = numberDelete;
-        },
-        setMessageUpdate: (state: ProjectState, action: PayloadAction<string>) => {
-            const message: string = action.payload;
-            state.messageUpdate = message;
-        },
-        setMessageCreate: (state: ProjectState, action: PayloadAction<string>) => {
-            const message: string = action.payload;
-            state.messageCreate = message;
-            swal({
-                title: state.messageCreate,
-                icon: "success",
-              });
-        },
+        }
     }
 });
 
-export const {setMessageCreate, setArrCategory, setMessageUpdate, setMessageDelete, setArrProject, setDetailProject } = projectReducer.actions
+export const {  setArrCategory, setArrProject, setDetailProject } = projectReducer.actions
 
 export default projectReducer.reducer
 
@@ -158,33 +137,30 @@ export const getDetailProjectByIdAPI = (id: number) => {
 
 export const deleteProjectAPI = (id: number) => {
     return async (dispatch: DispatchType) => {
-        const result: any = await http.delete(`/api/Project/deleteProject?projectId=${id}`);
-        let number: number = result.data.content;
-        const action: PayloadAction<number> = setMessageDelete(number);
-        await dispatch(action);
+        await http.delete(`/api/Project/deleteProject?projectId=${id}`);
         const actionGetAllProject = getProjectAllAPI();
         dispatch(actionGetAllProject);
+        show("success",'Success', 'The project has deleted from list!!')
     }
 }
 
 export const updateProjectAPI = (id: number | string, data: any) => {
     return async (dispatch: DispatchType) => {
-        const result: any = await http.put(`/api/Project/updateProject?projectId=${id}`, data);
-        let message: string = result.data.message;
-        const action: PayloadAction<string> = setMessageUpdate(message);
-        await dispatch(action);
+        await http.put(`/api/Project/updateProject?projectId=${id}`, data);
         const actionGetAllProject = getProjectAllAPI();
         dispatch(actionGetAllProject);
+        swal({
+            icon: "success",
+            title: 'Successfully Update!!'
+          }); 
     }
 }
 
 
-export const createProjectAPI = (value:ProjectCreate) => {
+export const createProjectAPI = (value: ProjectCreate) => {
     return async (dispatch: DispatchType) => {
-        const result: any = await http.post(`/api/Project/createProject`, value);
-        let message: string = result.data.message;
-        const action: PayloadAction<string> = setMessageCreate(message);
-        dispatch(action);
+        await http.post(`/api/Project/createProjectAuthorize`, value);
+        show('success', 'Successfully', 'Successfully Create Project')
     }
 }
 

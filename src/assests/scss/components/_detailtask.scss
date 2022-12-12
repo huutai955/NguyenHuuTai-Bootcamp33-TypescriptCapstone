@@ -1,0 +1,97 @@
+@import '../themes/variable';
+
+.ant-modal-content {
+    .ant-modal-header {
+        .ant-modal-title {
+             span {
+                cursor: pointer;
+                &:hover {
+                    text-decoration: underline;
+                }
+             }
+        }
+    }
+
+    .ant-modal-body {
+
+        .detailtask__row {
+            @media screen and (max-width: 576px) {
+                flex-direction: column-reverse;
+            }
+
+            .col-7 {
+                @media screen and (max-width: 576px) {
+                    width: 100%;
+                }
+
+                .issue {
+                    font-weight: 700;
+                    font-size: 18px;
+                    margin-bottom: 10px;
+                }
+
+                .description {
+                    .description__content {
+                        div {
+                            p {
+                                padding: 5px 2px;
+                                cursor: pointer;
+                                transition: 0.5s;
+                                border-radius: 10px;
+                                &:hover {
+                                    background-color: $bg-c3-color;
+                                }
+                            }
+
+                            button {
+                                padding: 4px 12px;
+                                border-radius: 2px;
+                            }
+
+                            .btnClose {
+                                 margin-left: 12px;
+                                 background-color: $bg-c1-color;
+                                 border: none;
+                                 color: $text-c1-color;
+                                 &:hover {
+                                    background-color: $bg-c2-color;
+                                 }
+                            }
+                        }
+
+                    }
+                }
+
+                .comment {
+                    .row {
+
+                        .col-11 {
+
+                            @media screen and (max-width: 576px) {
+                                width: 85%;
+                                margin-left: 14px;
+                            }
+
+                            .comment__button {
+                                span {
+                                    cursor: pointer;
+
+                                    &:hover {
+                                        text-decoration: underline;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+
+            .col-5 {
+                @media screen and (max-width: 576px) {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}

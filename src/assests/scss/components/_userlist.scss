@@ -1,0 +1,34 @@
+.ant-modal-body {
+
+    .row {
+        .col-7 {
+            @media screen and (max-width: 576px) {
+                width: 100%;
+            }
+
+            @media screen and (min-width: 577px) and (max-width: 768px) {
+                width: 50%;
+            }
+
+            #scrollableDiv {
+
+                .ant-list-item-meta-description {
+
+                    @media screen and (max-width: 768px) {
+                        display: none;
+                    }
+                }
+
+            }
+        }
+        .col-5 {
+            @media screen and (max-width: 576px) {
+                width: 100%;
+                margin-top: 15px;
+            }
+            @media screen and (min-width: 577px) and (max-width: 768px) {
+                width: 50%;
+            }
+        }
+    }
+}

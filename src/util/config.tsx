@@ -1,9 +1,23 @@
+import { NotificationPlacement } from "antd/lib/notification";
 import axios from "axios";
 import {createBrowserHistory} from 'history'
+import React from 'react'
+import { notification } from 'antd-notifications-messages';
+
 
 export const USER_LOGIN = 'userLogin';
 export const USER_PROFILE = 'userProfile';
 export const ACCESSTOKEN = 'accessToken';
+
+type NotificationType = 'success' | 'info' | 'warning' | 'error';
+export const show = (type: NotificationType, title: string, message: string) => {
+    notification({
+        type,
+        title: title,
+        message: message
+    });
+};
+
 
 // history dùng để chuyển hướng trang trong các file không phải là component
 export const history = createBrowserHistory();
@@ -102,16 +116,12 @@ http.interceptors.request.use((config) => {
 http.interceptors.response.use((response) => {
     return response;
 }, (error) => {
-
-    //Thất bại của tất cả request sử dụng http sẽ trả vào đây
     console.log(error);
-    if (error.response?.status === 401) {
-        // window.location.href = '/login';
-        //Chuyển hướng trang mà không cần reload lại trang để giữ được các state hiện tại trên redux
-        history.push('/login');
-    }
-    if (error.response?.status === 400 || error.response?.status === 400) {
-        history.push('/');
-    }
+    //Thất bại của tất cả request sử dụng http sẽ trả vào đây
+    // if (error.response?.status === 401) {
+    //     // window.location.href = '/login';
+    //     //Chuyển hướng trang mà không cần reload lại trang để giữ được các state hiện tại trên redux
+    //     history.push('/login');
+    // }
     return Promise.reject(error);
 })
