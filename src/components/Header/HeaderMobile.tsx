@@ -4,7 +4,11 @@ import { useDispatch } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 import { DispatchType } from '../../redux/configStore'
 import { setVisibleEditTask } from '../../redux/reducers/modalReducer'
-import { setUserProfile } from '../../redux/reducers/userReducer'
+import { getAllPriorityAPI } from '../../redux/reducers/priorityReducer'
+import { getProjectAllAPI } from '../../redux/reducers/projectReducer'
+import { getAllStatusAPI } from '../../redux/reducers/statusReducer'
+import { getAllTaskAPI } from '../../redux/reducers/taskReducer'
+import { getAllUserAPI, setUserProfile } from '../../redux/reducers/userReducer'
 import { settings } from '../../util/config'
 import PopupMobile from '../Popup/PopupMobile'
 
@@ -12,11 +16,29 @@ type Props = {}
 
 export default function HeaderMobile({ }: Props) {
   const dispatch: DispatchType = useDispatch();
+
+  const [current, setCurrent] = useState('1');
+
+
+  // Xử lý nghiệp vụ gọi api khi click vào create task
+  const callAPICreateTask = () => {
+    const action = getProjectAllAPI();
+    dispatch(action)
+    const actionPriority = getAllPriorityAPI();
+    dispatch(actionPriority)
+    const actionTask = getAllTaskAPI();
+    dispatch(actionTask)
+    const actionStatus = getAllStatusAPI();
+    dispatch(actionStatus);
+    const actionUser = getAllUserAPI()
+    dispatch(actionUser);
+  }
+
+  // Xử lý nghiệp vụ mở popup khi click vào create task
   const openPopup = () => {
     const action = setVisibleEditTask(true);
     dispatch(action);
   }
-  const [current, setCurrent] = useState('1');
 
   return (
     <div className='headerMobile'>
@@ -46,6 +68,7 @@ export default function HeaderMobile({ }: Props) {
                   label: 'Task', key: 'task', children: [
                     {
                       label: <span onClick={() => {
+                        callAPICreateTask();
                         openPopup();
                       }}>Create Task</span>, key: 'createtask'
                     }

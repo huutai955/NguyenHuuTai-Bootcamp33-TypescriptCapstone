@@ -55,43 +55,31 @@ export default function Popup({ }: Props) {
       listUserAsign: Yup.array()
         .min(1, "List user is not empty!!. If your project is not any members. Let's add some members")
     }),
-    onSubmit: (values: MyValue) => {
-      // const action = createTaskAPI(values);
-      // dispatch(action)
-      // if (detailProject?.id) {
-      //   const actionDetail = getDetailProjectByIdAPI(detailProject?.id)
-      //   dispatch(actionDetail);
-      // }
-      // console.log(f)
+    onSubmit: (values: MyValue, { resetForm }) => {
+      const action = createTaskAPI(values);
+      dispatch(action)
+      // Khi nào trang ở Task Component thì sẽ gọi API để load lại dữ liệu
+      if (detailProject?.id) {
+        const actionDetail = getDetailProjectByIdAPI(detailProject?.id)
+        dispatch(actionDetail);
+      }
     }
   })
 
 
+  // Xử lý nghiệp vụ cho Drawer
   const handleCancel = () => {
     const action = setVisibleEditTask(false);
     dispatch(action)
   }
 
-
-  const handleChangeSelect = (e: any) => {
-    const actionMembers = getArrMembersByProjectID(e.target.value);
+  // Xử lý nghiệp vụ cho phần projectId và assignees khi chọn project sẽ call api và load lại
+  // phần assignees
+  const handleChangeSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const actionMembers = getArrMembersByProjectID(Number(e.target.value));
     dispatch(actionMembers);
-    console.log(e.target.value);
+    createTask.setFieldValue("projectId", e.target.value)
   }
-
-
-  useEffect(() => {
-    const action = getProjectAllAPI();
-    dispatch(action)
-    const actionPriority = getAllPriorityAPI();
-    dispatch(actionPriority)
-    const actionTask = getAllTaskAPI();
-    dispatch(actionTask)
-    const actionStatus = getAllStatusAPI();
-    dispatch(actionStatus);
-    const actionUser = getAllUserAPI()
-    dispatch(actionUser);
-  }, [])
 
   useEffect(() => {
     if (arrProject[0]?.id !== undefined) {
@@ -99,10 +87,6 @@ export default function Popup({ }: Props) {
       dispatch(actionMembers);
     }
   }, [arrProject])
-
-  console.log(arrProject[0]?.id);
-  console.log(arrMembers);
-
 
   return (
     <div>
@@ -117,7 +101,7 @@ export default function Popup({ }: Props) {
         <form className='form' onSubmit={createTask.handleSubmit}>
           <div className="form-group">
             <p>Project</p>
-            <select className='form-control' onClick={handleChangeSelect} name='projectId' onChange={createTask.handleChange}>
+            <select className='form-control' name='projectId' value={createTask.values.projectId || ''} onChange={handleChangeSelect}>
               {arrProject.map((user, index) => {
                 return <option key={index} value={user.id}>{user.projectName}</option>
               })}
@@ -165,9 +149,11 @@ export default function Popup({ }: Props) {
                 <Select
                   mode="tags"
                   placeholder="Please select"
+                  className={"listUserAsign"}
                   onChange={(values) => {
-                    createTask.setFieldValue('listUserAsign', values)
-                  }}
+                    createTask.setFieldValue('listUserAsign', values);
+                  }
+                  }
                   style={{ width: '100%' }}
                   options={arrMembers?.map((user) => {
                     return {
@@ -190,7 +176,6 @@ export default function Popup({ }: Props) {
                       let { value } = e.target;
                       let numberValue = Number(value)
                       setTimeSpent(numberValue);
-
                       createTask.setFieldValue('timeTrackingSpent', value);
                     }} />
                   </div>
@@ -210,7 +195,7 @@ export default function Popup({ }: Props) {
 
           <div className="form-group">
             <p>Estimate</p>
-            <input type="number" defaultValue={0} min={0} max={24} className='form-control' name='originalEstimate' />
+            <input type="number" defaultValue={0} min={0} max={24} className='form-control' name='originalEstimate' onChange={createTask.handleChange} />
           </div>
           <div className="form-group">
             <p>Decriptions</p>
@@ -235,7 +220,10 @@ export default function Popup({ }: Props) {
             />
             <p className='text-danger m-0 p-0'>{createTask.errors.description}</p>
           </div>
-          <button type='submit' className='btn btn-primary mt-3'>Create New Task</button>
+          <div className='btnForm'>
+            <button type='submit' className='btn btn-primary mt-3'>Create New Task</button>
+            <button type='reset' className='btn mt-3' style={{ backgroundColor: '#c7c7c7', marginLeft: 10 }}>Reset Form</button>
+          </div>
         </form>
       </Drawer>
     </div>

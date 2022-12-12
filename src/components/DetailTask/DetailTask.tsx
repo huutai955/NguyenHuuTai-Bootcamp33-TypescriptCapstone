@@ -7,14 +7,10 @@ import { Editor } from '@tinymce/tinymce-react'
 import { setVisibleTask } from '../../redux/reducers/modalReducer'
 import { deleteTaskAPI, updateTaskDetailAPI } from '../../redux/reducers/taskReducer'
 import { addCommentAPI, commentContent, deleteCommentAPI, getAllCommentAPI, updateCommentAPI } from '../../redux/reducers/commentReducer'
-import { compact } from 'lodash'
 import '../../assests/scss/components/_detailtask.scss'
 const { Panel } = Collapse;
 const { Option } = Select;
 type Props = {}
-const { TextArea } = Input;
-
-
 
 export default function DetailTask({ }: Props) {
     const { taskDetail, arrTask } = useSelector((state: RootState) => state.taskReducer)
@@ -37,7 +33,7 @@ export default function DetailTask({ }: Props) {
         statusId: taskDetail?.statusId,
         originalEstimate: taskDetail?.originalEstimate,
         timeTrackingSpent: taskDetail?.timeTrackingSpent,
-        timeTrackingRemaining: taskDetail?.originalEstimate,
+        timeTrackingRemaining: taskDetail?.timeTrackingRemaining,
         projectId: taskDetail?.projectId,
         typeId: taskDetail?.typeId,
         priorityId: taskDetail?.priorityId
@@ -45,6 +41,7 @@ export default function DetailTask({ }: Props) {
     const [editComment, setEditComment] = useState("");
     const [textDescription, setTextDescription] = useState<string | undefined>(taskDetail?.description);
     const searchRef: any = useRef(null);
+
 
     const renderTimeTracking = () => {
         const max = Number(defaultValueUpdate.timeTrackingSpent) + Number(defaultValueUpdate.timeTrackingRemaining)
@@ -56,12 +53,11 @@ export default function DetailTask({ }: Props) {
                 />
             </div >
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <p>{Number(defaultValueUpdate.timeTrackingRemaining)}h logged</p>
-                <p>{Number(defaultValueUpdate.timeTrackingSpent)}h estimated</p>
+                <p>{Number(defaultValueUpdate.timeTrackingSpent)}h logged</p>
+                <p>{Number(defaultValueUpdate.timeTrackingRemaining)}h remaining</p>
             </div>
         </div >
     }
-
 
     const renderDescription = () => {
         const newString: any = taskDetail?.description
@@ -110,6 +106,29 @@ export default function DetailTask({ }: Props) {
         </div>
     }
 
+    console.log(defaultValueUpdate.timeTrackingRemaining)
+
+    // Xử lý nghiệp vụ cho phần description
+    const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const value: commentContent = {
+            taskId: Number(taskDetail?.taskId),
+            contentComment: commentContent
+        }
+        const action = addCommentAPI(value, Number(taskDetail?.taskId));
+        dispatch(action);
+    }
+
+    // // Xử lý nghiệp vụ cho phần PopConfirm của antd
+    const deleteConfirm = () => {
+        const action = deleteTaskAPI(Number(taskDetail?.taskId), Number(taskDetail?.projectId));
+        dispatch(action);
+        const actionHideTask = setVisibleTask(false)
+        dispatch(actionHideTask);
+    }
+
+
+
     useEffect(() => {
         setDefaultValueUpdate({
             listUserAsign: taskDetail?.assigness.map((assignes) => {
@@ -121,44 +140,26 @@ export default function DetailTask({ }: Props) {
             statusId: taskDetail?.statusId,
             originalEstimate: taskDetail?.originalEstimate,
             timeTrackingSpent: taskDetail?.timeTrackingSpent,
-            timeTrackingRemaining: taskDetail?.originalEstimate,
+            timeTrackingRemaining: taskDetail?.timeTrackingRemaining,
             projectId: taskDetail?.projectId,
             typeId: taskDetail?.typeId,
             priorityId: taskDetail?.priorityId
         })
     }, [taskDetail])
 
-
-    const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        let { value } = e.target;
-        setCommentContent(value);
-    };
-
-    const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        const value: commentContent = {
-            taskId: Number(taskDetail?.taskId),
-            contentComment: commentContent
-        }
-        const action = addCommentAPI(value, Number(taskDetail?.taskId));
-        dispatch(action);
-    }
-
-    const deleteConfirm = () => {
-        const action = deleteTaskAPI(Number(taskDetail?.taskId), Number(taskDetail?.projectId));
-        dispatch(action);
-        const actionHideTask = setVisibleTask(false)
-        dispatch(actionHideTask);
-
-    }
     return (
         <div className='detailtask'>
             <Modal
                 title={<div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <div className="task-title d-flex" style={{ alignItems: 'center' }}>
                         <i className='fa fa-bookmark' style={{ marginRight: 10 }} />
-                        <select className='form-control' value={taskDetail?.typeId || ''} onChange={() => {
-
+                        <select className='form-control' value={taskDetail?.typeId || ''} onChange={(e) => {
+                            const valueUpdate = {
+                                ...defaultValueUpdate,
+                                typeId: e.target.value
+                            }
+                            const action = updateTaskDetailAPI(valueUpdate, Number(taskDetail?.projectId), Number(taskDetail?.taskId));
+                            dispatch(action);
                         }}>
                             {arrTask.map((task, index) => {
                                 return <option key={index} value={task.id}>{task.taskType}</option>
@@ -251,7 +252,7 @@ export default function DetailTask({ }: Props) {
                                                         content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
                                                     }}
                                                 />
-                                                : parse(comment.contentComment)}
+                                                : <p>{parse(comment.contentComment)}</p>}
                                             {editComment === comment.id.toString() ?
                                                 <div className="comment__button">
                                                     <span style={{ marginRight: 10 }} onClick={() => {
@@ -357,6 +358,7 @@ export default function DetailTask({ }: Props) {
                                             clearTimeout(searchRef.current)
                                         }
                                         searchRef.current = setTimeout(() => {
+                                            // Bắt trường hợp khi user xóa hết số trong input thì giá trị sẽ trả về 0 để không bị lỗi khi gửi dữ liệu
                                             if (value == null) {
                                                 const valueUpdate = {
                                                     ...defaultValueUpdate,
@@ -372,7 +374,7 @@ export default function DetailTask({ }: Props) {
                                                 const action = updateTaskDetailAPI(valueUpdate, Number(taskDetail?.projectId), Number(taskDetail?.taskId));
                                                 dispatch(action)
                                             }
-                                        }, 200)
+                                        }, 100)
                                     }} />
                                 </div>
                                 <div className="time-tracking">
@@ -402,7 +404,7 @@ export default function DetailTask({ }: Props) {
                                                     const action = updateTaskDetailAPI(valueUpdate, Number(taskDetail?.projectId), Number(taskDetail?.taskId));
                                                     dispatch(action)
                                                 }
-                                            }, 200)
+                                            }, 100)
                                         }} />
                                         <InputNumber min={0} style={{ width: '100%', marginLeft: 10 }} onChange={(value) => {
                                             if (searchRef.current) {
@@ -421,11 +423,10 @@ export default function DetailTask({ }: Props) {
                                                         ...defaultValueUpdate,
                                                         timeTrackingRemaining: value
                                                     }
-                                                    console.log(valueUpdate.timeTrackingRemaining)
                                                     const action = updateTaskDetailAPI(valueUpdate, Number(taskDetail?.projectId), Number(taskDetail?.taskId));
                                                     dispatch(action)
                                                 }
-                                            }, 200)
+                                            }, 100)
                                         }} />
                                     </div>
                                 </div>

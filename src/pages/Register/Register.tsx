@@ -51,7 +51,6 @@ export default function Register({ }: Props) {
     }
   })
 
-  console.log(formik.errors.email)
 
   return (
     <div className='register'>

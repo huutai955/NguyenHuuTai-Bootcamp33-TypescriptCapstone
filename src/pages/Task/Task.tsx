@@ -8,8 +8,9 @@ import TaskContent from '../../components/TaskContent/TaskContent'
 import DetailTask from '../../components/DetailTask/DetailTask'
 import '../../assests/scss/pages/_task.scss'
 import { setVisible } from '../../redux/reducers/modalReducer'
-import UserListTask from '../../components/UserModal/UserListTask'
 import { history, settings } from '../../util/config'
+import { getAllUserAPI } from '../../redux/reducers/userReducer'
+import AdditionalUserListTask from '../../components/UserModal/AdditionalUserListTask'
 
 type Props = {}
 
@@ -30,9 +31,9 @@ export default function Task({ }: Props) {
 
     useEffect(() => {
         if (userProfile === null) {
-          history.push("/")
+            history.push("/")
         }
-      }, [userProfile])
+    }, [userProfile])
     return (
         <div className="task" style={{ paddingTop: 100 }}>
             <div className='container'>
@@ -50,13 +51,15 @@ export default function Task({ }: Props) {
                         <span style={{ fontSize: 20, padding: '0 11px', marginLeft: 10, borderRadius: '50%', cursor: 'pointer', backgroundColor: '#ccc' }} onClick={() => {
                             const action = setVisible(true);
                             dispatch(action);
+                            const actionUsers = getAllUserAPI();
+                            dispatch(actionUsers);
                         }}>+</span>
                     </div>
                 </div>
                 <div className="task__content">
                     <TaskContent />
                 </div>
-                <UserListTask />
+                <AdditionalUserListTask />
                 <DetailTask />
             </div>
         </div>

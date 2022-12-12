@@ -4,8 +4,7 @@ import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
 import { DispatchType, RootState } from '../../redux/configStore'
 import { setVisible } from '../../redux/reducers/modalReducer'
-import { getDetailProjectByIdAPI, getProjectAllAPI } from '../../redux/reducers/projectReducer'
-import { assignUserProject, assignUserProjectInCreateProject, getAllUserAPI, removeUserProjectAPI, removeUserProjectAPIInCreatePost } from '../../redux/reducers/userReducer'
+import {  assignUserProjectInCreateProject, removeUserProjectAPIInCreatePost } from '../../redux/reducers/userReducer'
 
 type Props = {}
 export interface getUser {
@@ -17,20 +16,20 @@ export interface getUser {
 }
 
 
-export default function UserListTask({ }: Props) {
+export default function AdditionalUserListTask({ }: Props) {
     const { visible } = useSelector((state: RootState) => state.modalReducer);
     const { arrUser } = useSelector((state: RootState) => state.userReducer);
-    const { arrProject, detailProject } = useSelector((state: RootState) => state.projectReducer);
+    const {  detailProject } = useSelector((state: RootState) => state.projectReducer);
     const [arrUsersFinding, setArrUsersFinding] = useState<getUser[]>([]);
-    const [userList, setUserList] = useState<getUser[]>(arrUser);
-    const [projectId, setProjectID] = useState(arrProject[0]?.id)
     const dispatch: DispatchType = useDispatch();
 
+    // Xử lý nghiệp vụ cho modal
     const handleCancel = () => {
         const action = setVisible(false);
         dispatch(action);
     }
 
+    // Remove dấu khi search
     const removeVietnameseTones = (str: string) => {
         str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
         str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");

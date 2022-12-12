@@ -45,20 +45,21 @@ export default function Home({ }: Props) {
   const [valueName, setValueName] = useState('');
   const dispatch: DispatchType = useDispatch();
   const data: DataType[] = arrProject;
-
-
   const searchRef: any = useRef(null);
 
+  // Xử lý nghiệp vụ cho Editproject
   const showDrawer = () => {
     const action = setVisible(true);
     dispatch(action);
   }
 
+  // Xử lý nghiệp vụ cho Editproject
   const getDetailProject = (id: number) => {
     const action = getDetailProjectByIdAPI(id);
     dispatch(action);
   }
 
+  // Xử lý nghiệp vụ cho button delete
   const deleteProject = (id: number) => {
     const action = deleteProjectAPI(id);
     dispatch(action);
@@ -120,7 +121,6 @@ export default function Home({ }: Props) {
       key: 'member',
       render: (value, record, index): any => {
         const renderTbodyEditUser = () => {
-
           return record.members.map((member, index) => {
             return <tbody key={index}>
               <tr>

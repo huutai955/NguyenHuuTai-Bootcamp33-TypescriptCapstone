@@ -43,7 +43,7 @@ export default function PopupMobile({ }: Props) {
       originalEstimate: 0,
       timeTrackingSpent: 0,
       timeTrackingRemaining: 0,
-      projectId: arrPriority[0]?.priorityId,
+      projectId: arrProject[0]?.id,
       typeId: arrTask[0]?.id,
       priorityId: arrPriority[0]?.priorityId,
       listUserAsign: []
@@ -59,6 +59,7 @@ export default function PopupMobile({ }: Props) {
     onSubmit: (values: MyValue) => {
       const action = createTaskAPI(values);
       dispatch(action)
+      // Khi nào trang ở Task Component thì sẽ gọi API để load lại dữ liệu
       if (detailProject?.id) {
         const actionDetail = getDetailProjectByIdAPI(detailProject?.id)
         dispatch(actionDetail);
@@ -67,29 +68,26 @@ export default function PopupMobile({ }: Props) {
   })
 
 
+  // Xử lý nghiệp vụ cho Drawer
   const handleCancel = () => {
     const action = setVisibleEditTask(false);
     dispatch(action)
   }
 
-  const handleChangeSelect = (e: any) => {
-    const actionMembers = getArrMembersByProjectID(e.target.value);
+  // Xử lý nghiệp vụ cho phần projectId và assignees khi chọn project sẽ call api và load lại
+  // phần assignees
+  const handleChangeSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const actionMembers = getArrMembersByProjectID(Number(e.target.value));
     dispatch(actionMembers);
+    createTask.setFieldValue("projectId", e.target.value)
   }
 
-
   useEffect(() => {
-    const action = getProjectAllAPI();
-    dispatch(action)
-    const actionPriority = getAllPriorityAPI();
-    dispatch(actionPriority)
-    const actionTask = getAllTaskAPI();
-    dispatch(actionTask)
-    const actionStatus = getAllStatusAPI();
-    dispatch(actionStatus);
-    const actionUser = getAllUserAPI()
-    dispatch(actionUser);
-  }, [])
+    if (arrProject[0]?.id !== undefined) {
+      const actionMembers = getArrMembersByProjectID(arrProject[0]?.id);
+      dispatch(actionMembers);
+    }
+  }, [arrProject])
 
   return (
     <div className='popupmobile'>
@@ -99,7 +97,7 @@ export default function PopupMobile({ }: Props) {
         <form className='form' onSubmit={createTask.handleSubmit}>
           <div className="form-group">
             <p>Project</p>
-            <select className='form-control' onClick={handleChangeSelect} name='projectId' onChange={createTask.handleChange}>
+            <select className='form-control' value={createTask.values.projectId || ''} name='projectId' onChange={handleChangeSelect}>
               {arrProject.map((user, index) => {
                 return <option key={index} value={user.id}>{user.projectName}</option>
               })}
@@ -217,7 +215,10 @@ export default function PopupMobile({ }: Props) {
             />
             <p className='text-danger m-0 p-0'>{createTask.errors.description}</p>
           </div>
-          <button type='submit' className='btn btn-primary mt-3'>Submit</button>
+          <div className='btnForm'>
+            <button type='submit' className='btn btn-primary mt-3'>Create New Task</button>
+            <button type='reset' className='btn mt-3' style={{ backgroundColor: '#c7c7c7', marginLeft: 10 }}>Reset Form</button>
+          </div>
         </form>
       </Modal>
     </div>

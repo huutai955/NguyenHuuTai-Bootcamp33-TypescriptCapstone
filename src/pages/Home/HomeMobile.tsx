@@ -49,16 +49,18 @@ export default function Home({ }: Props) {
 
   const searchRef: any = useRef(null);
 
+  // Xử lý nghiệp vụ cho Editproject
   const showDrawer = () => {
     const action = setVisible(true);
     dispatch(action);
   }
 
+  // Xử lý nghiệp vụ cho Editproject
   const getDetailProject = (id: number) => {
     const action = getDetailProjectByIdAPI(id);
     dispatch(action);
   }
-
+  // Xử lý nghiệp vụ cho button delete
   const deleteProject = (id: number) => {
     const action = deleteProjectAPI(id);
     dispatch(action);

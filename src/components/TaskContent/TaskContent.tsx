@@ -6,7 +6,9 @@ import { useParams } from 'react-router-dom'
 import { DispatchType, RootState } from '../../redux/configStore'
 import { getAllCommentAPI } from '../../redux/reducers/commentReducer'
 import { setVisibleTask } from '../../redux/reducers/modalReducer'
-import { getTaskDetailAPI, updateStatusAPI, updateTaskDetailAPI } from '../../redux/reducers/taskReducer'
+import { getAllPriorityAPI } from '../../redux/reducers/priorityReducer'
+import { getAllStatusAPI } from '../../redux/reducers/statusReducer'
+import { getAllTaskAPI, getTaskDetailAPI, updateStatusAPI, updateTaskDetailAPI } from '../../redux/reducers/taskReducer'
 
 
 type Props = {}
@@ -16,12 +18,12 @@ export default function TaskContent({ }: Props) {
     const dispatch: DispatchType = useDispatch();
     const params = useParams()
 
+    // Xử lý nghiệp vụ cho Drag
     const handleDrag = (result: any) => {
         const valueUpdate = {
             "taskId": result.draggableId,
             "statusId": result.destination.droppableId
         }
-        console.log(valueUpdate)
         const action = updateStatusAPI(valueUpdate, Number(params.id));
         dispatch(action);
     }
@@ -47,6 +49,12 @@ export default function TaskContent({ }: Props) {
                                                         dispatch(action);
                                                         const actionComment = getAllCommentAPI(detail.taskId)
                                                         dispatch(actionComment);
+                                                        const actionTaskType = getAllTaskAPI();
+                                                        dispatch(actionTaskType);
+                                                        const actionStatus = getAllStatusAPI();
+                                                        dispatch(actionStatus);
+                                                        const actionPriority = getAllPriorityAPI();
+                                                        dispatch(actionPriority);
                                                     }}>
                                                         <p style={{ fontWeight: 700 }}>{detail.taskName}</p>
                                                         <div className="body d-flex justify-content-between">

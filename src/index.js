@@ -10,7 +10,6 @@ import './index.scss'
 import { Provider } from 'react-redux';
 import { store } from './redux/configStore'
 import ThirdTemplates from './templates/ThirdTemplates/ThirdTemplates';
-import App from './pages/Demo/App';
 import 'antd/dist/antd.min.css';
 import Project from './pages/Project/Project';
 import { history } from './util/config';
@@ -30,7 +29,6 @@ root.render(
       <Routes>
         <Route path='' element={<ResponsiveItem component={FirstTemplates} mobileComponent={FirstTemplatesMobile} />}>
           <Route path='/projects' element={<ResponsiveItem component={Home} mobileComponent={HomeMobile} />} />
-          <Route path='/app' element={<App />} />
           <Route path='/createproject' element={<Project />} />
           <Route path="/task">
             <Route path=':id' element={<Task />} />

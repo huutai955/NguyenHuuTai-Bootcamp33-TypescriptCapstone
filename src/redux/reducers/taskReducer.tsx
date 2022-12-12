@@ -144,8 +144,9 @@ export const updateTaskDetailAPI = (value: any, id: number, taskDetailID: number
             const actionTaskDetail = getTaskDetailAPI(taskDetailID)
             dispatch(actionTaskDetail);
         } catch (err: any) {
-            // Fixing here later
-            console.log(err)
+            if (err.response.data.content === 'User is unthorization!') {
+                show('error', `Error`, `You are not project's creator!!`)
+            }
         }
     }
 }

@@ -1,45 +1,15 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { Editor } from '@tinymce/tinymce-react'
 import { useSelector, useDispatch } from 'react-redux'
 import { DispatchType, RootState } from '../../redux/configStore'
 import { useFormik, FormikProps } from 'formik'
 import { Button, Drawer, Space } from 'antd';
 import { setVisible } from '../../redux/reducers/modalReducer'
-import { getProjectCategoryAPI, setDetailProject, updateProjectAPI } from '../../redux/reducers/projectReducer'
-import ReactHTMLParse from 'react-html-parser';
+import { CategoryProject, getProjectCategoryAPI, updateProjectAPI } from '../../redux/reducers/projectReducer'
 import * as Yup from 'yup';
 
 type Props = {}
 type MyValue = { projectName: string | undefined, categoryId: number | string | undefined, description: string | undefined, id: number | string | undefined };
-export interface CategoryProject {
-    id: number;
-    projectCategoryName: string;
-}
-export interface DetailProject {
-    lstTask: LstTask[];
-    members: Member[];
-    creator: Creator;
-    id: number;
-    projectName: string;
-    description: string;
-    projectCategory: Creator;
-    alias: string;
-}
-export interface Creator {
-    id: number;
-    name: string;
-}
-export interface LstTask {
-    lstTaskDeTail: any[];
-    statusId: string;
-    statusName: string;
-    alias: string;
-}
-export interface Member {
-    userId: number;
-    name: string;
-    avatar: string;
-}
 
 export default function EditProject({ }: Props) {
     const { detailProject, arrCategory } = useSelector((state: RootState) => state.projectReducer);
@@ -55,11 +25,11 @@ export default function EditProject({ }: Props) {
         },
         validationSchema: Yup.object().shape({
             projectName: Yup.string()
-                .required("Vui lòng cập nhật thông tin!!"),
+                .required("Project name is not empty!!"),
             description: Yup.string()
-                .required("Vui lòng cập nhật thông tin!!"),
+                .required("Description is not empty!!"),
             categoryId: Yup.string()
-                .required("Vui lòng cập nhật thông tin!!"),
+                .required("Category ID is not empty!!"),
         }),
         onSubmit: (values: MyValue) => {
             const action = updateProjectAPI(Number(values.id), values)
@@ -67,6 +37,14 @@ export default function EditProject({ }: Props) {
         }
     })
 
+
+
+    // Xử lý nghiệp vụ cho description
+    const handleEditorChange = (content: string, editor: any) => {
+        formik.setFieldValue('description', content)
+    }
+
+    // Xử lý nghiệp vụ cho Drawer
     const onClose = () => {
         const action = setVisible(false);
         dispatch(action);
@@ -76,10 +54,6 @@ export default function EditProject({ }: Props) {
         const action = getProjectCategoryAPI();
         dispatch(action);
     }, [])
-
-    const handleEditorChange = (content: string, editor: any) => {
-        formik.setFieldValue('description', content)
-    }
 
 
     return (
@@ -136,7 +110,7 @@ export default function EditProject({ }: Props) {
                 <p className='text-danger'>{formik.errors.categoryId || formik.errors.description || formik.errors.projectName}</p>
                 <Space style={{ marginTop: 50 }} className="d-flex justify-content-end">
                     <Button onClick={onClose}>Cancel</Button>
-                    <button type='submit'>
+                    <button type='submit' className='btn btn-primary' style={{padding: '4.1px 15px', border: '1px solid #fff', borderRadius: 'unset', fontSize: 14}}>
                         Submit
                     </button>
                 </Space>

@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react'
-// type Props = {
-//     component: JSX.Element // <Component />
-//     mobileComponent?: JSX.Element
-// }
 type Props = {
-    component: React.FC // <Component />
+    component: React.FC
     mobileComponent?: React.FC
 }
 type Screen = {

@@ -5,10 +5,10 @@ import { DispatchType, RootState } from '../../redux/configStore';
 import { FormikProps, useFormik } from 'formik';
 import * as Yup from 'yup'
 import { createProjectAPI, getProjectAllAPI, getProjectCategoryAPI } from '../../redux/reducers/projectReducer';
-import UserList from '../../components/UserModal/UserList';
 import { setVisible } from '../../redux/reducers/modalReducer';
 import { getAllUserAPI } from '../../redux/reducers/userReducer';
 import { history, settings } from '../../util/config';
+import AdditionalUserList from '../../components/UserModal/AdditionalUserList';
 
 type Props = {}
 
@@ -21,7 +21,6 @@ type MyValue = { projectName: string, description: string, categoryId: number | 
 export default function Project({ }: Props) {
   const { detailProject, arrCategory } = useSelector((state: RootState) => state.projectReducer);
   const { userProfile } = useSelector((state: RootState) => state.userReducer);
-
   const dispatch: DispatchType = useDispatch();
   const formik: FormikProps<MyValue> = useFormik<MyValue>({
     initialValues: {
@@ -41,9 +40,12 @@ export default function Project({ }: Props) {
     }
   })
 
+  // Xử lý nghiệp vụ cho description
   const handleEditorChange = (content: string, editor: any) => {
     formik.setFieldValue('description', content)
   }
+
+  
   useEffect(() => {
     if (!settings.getStore("accessToken")) {
       history.push("/")
@@ -116,7 +118,7 @@ export default function Project({ }: Props) {
           </form>
         </div>
       </div>
-      <UserList />
+      <AdditionalUserList />
     </>
   )
 }

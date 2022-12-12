@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { http } from '../../util/config';
+import { http, show } from '../../util/config';
 import { DispatchType } from '../configStore';
 
 export interface commentContent {
@@ -67,17 +67,29 @@ export const getAllCommentAPI = (taskID: number) => {
 
 export const updateCommentAPI = (commentId: number, commentUpdate: string, taskId: number) => {
     return async (dispatch: DispatchType) => {
-        await http.put(`/api/Comment/updateComment?id=${commentId}&contentComment=${commentUpdate}`);
-        const actionGetComment = getAllCommentAPI(taskId);
-        dispatch(actionGetComment);
+        try {
+            await http.put(`/api/Comment/updateComment?id=${commentId}&contentComment=${commentUpdate}`);
+            const actionGetComment = getAllCommentAPI(taskId);
+            dispatch(actionGetComment);
+        } catch (err: any) {
+            if (err.response.data.content === '403 Forbidden !') {
+                show('error', 'Error', `You cannot edit others comment!!`)
+            }
+        }
     }
 }
 
 export const deleteCommentAPI = (commentId: number, taskId: number) => {
     return async (dispatch: DispatchType) => {
-        await http.delete(`/api/Comment/deleteComment?idComment=${commentId}`);
-        const actionGetComment = getAllCommentAPI(taskId);
-        dispatch(actionGetComment);
+        try {
+            await http.delete(`/api/Comment/deleteComment?idComment=${commentId}`);
+            const actionGetComment = getAllCommentAPI(taskId);
+            dispatch(actionGetComment);
+        } catch (err: any) {
+            if (err.response.data.content === '403 Forbidden !') {
+                show('error', 'Error', `You cannot delete others comment!!`)
+            }
+        }
     }
 }
 

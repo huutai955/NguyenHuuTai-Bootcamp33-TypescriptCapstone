@@ -1,5 +1,5 @@
 import { Modal } from 'antd'
-import { Formik, FormikProps, useFormik } from 'formik'
+import { FormikProps, useFormik } from 'formik'
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
@@ -26,17 +26,17 @@ export default function EditUser({ }: Props) {
         },
         validationSchema: Yup.object().shape({
             email: Yup.string()
-                .email("Email không đúng định dạng!!")
-                .required("Email không được để trống!!"),
+                .email("Your email is incorrect to email format !!")
+                .required("Email is not empty!!"),
             passWord: Yup.string()
-                .required("Password không được để trống!!")
-                .min(6, "Password phải dài hơn 6 ký tự!!")
-                .max(15, "Password phải ít hơn 15 ký tự!!"),
+                .required("Password is not empty!!")
+                .min(6, "Password length is more than 6 characters!!")
+                .max(15, "Password length is less than 15 characters!!"),
             name: Yup.string()
-                .required("Tên không được bỏ trống!!"),
+                .required("Name is not empty!!"),
             phoneNumber: Yup.string()
-                .required("Số điện thoại không được bỏ trống !!")
-                .matches(/((09|03|07|08|05)+([0-9]{8})\b)/g, "Số điện thoại không hợp lệ!!")
+                .required("Phone number is not empty!! !!")
+                .matches(/((09|03|07|08|05)+([0-9]{8})\b)/g, "The phone number is not in the correct Vietnamese phone number format!!")
         })
         ,
         onSubmit: (values: MyValue) => {
@@ -46,6 +46,9 @@ export default function EditUser({ }: Props) {
             dispatch(actionVisible);
         }
     })
+
+
+    // Xử lý nghiệp vụ đóng mở cho modal
     const handleCancel = () => {
         const action = setVisibleEditUser(false);
         dispatch(action);
