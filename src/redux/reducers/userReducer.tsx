@@ -95,16 +95,6 @@ const userReducer = createSlice({
       const getUser: getUser[] = action.payload;
       state.arrGetUser = getUser;
     },
-    setMessageAddUserError: (state: UserState, action: PayloadAction<string>) => {
-      const message: string = action.payload;
-      state.messageAddUser = message;
-      if (state.messageAddUser === "Không đủ quyền truy cập!") {
-        swal({
-          title: "You are not project's creator!!",
-          icon: "error",
-        });
-      }
-    },
     setArrUser: (state: UserState, action: PayloadAction<getUser[]>) => {
       const getUser: getUser[] = action.payload;
       state.arrUser = getUser;
@@ -120,7 +110,7 @@ const userReducer = createSlice({
   }
 });
 
-export const { setUserInfor, setArrMembers, setArrUser, setMessageAddUserError, setGetUser, setMessageSignUp, setUserProfile } = userReducer.actions
+export const { setUserInfor, setArrMembers, setArrUser, setGetUser, setMessageSignUp, setUserProfile } = userReducer.actions
 
 export default userReducer.reducer;
 
@@ -171,6 +161,7 @@ export const postSignUpAPI = (account: AccountSignUp) => {
     const message: string = result.data.message;
     const action: PayloadAction<string> = setMessageSignUp(message);
     dispatch(action);
+    history.push('/')
   }
 }
 

@@ -39,11 +39,12 @@ export default function EditUser({ }: Props) {
                 .matches(/((09|03|07|08|05)+([0-9]{8})\b)/g, "The phone number is not in the correct Vietnamese phone number format!!")
         })
         ,
-        onSubmit: (values: MyValue) => {
+        onSubmit: (values: MyValue, {resetForm}) => {
             const action = editUserAPI(values);
             dispatch(action);
             const actionVisible = setVisibleEditUser(false);
             dispatch(actionVisible);
+            resetForm();
         }
     })
 
@@ -63,7 +64,7 @@ export default function EditUser({ }: Props) {
                 <div className="row mb-3">
                     <div className="col-6">
                         <p className='m-0'>Password</p>
-                        <input type="password" className='form-control' name='passWord' onChange={updateUser.handleChange} />
+                        <input type="password" className='form-control' value={updateUser.values.passWord || ""} name='passWord' onChange={updateUser.handleChange} />
                         <p className='text-danger' style={{ fontWeight: 400 }}>{updateUser.errors.passWord}</p>
                     </div>
                     <div className="col-6">

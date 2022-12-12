@@ -63,6 +63,7 @@ export default function Popup({ }: Props) {
         const actionDetail = getDetailProjectByIdAPI(detailProject?.id)
         dispatch(actionDetail);
       }
+      resetForm()
     }
   })
 
@@ -109,7 +110,7 @@ export default function Popup({ }: Props) {
           </div>
           <div className="form-group">
             <p>TaskName</p>
-            <input type="text" name='taskName' className='form-control' onChange={createTask.handleChange} />
+            <input type="text" name='taskName' className='form-control' value={createTask.values.taskName || ""} onChange={createTask.handleChange} />
             <p className='text-danger m-0 p-0'>{createTask.errors.taskName}</p>
           </div>
           <div className="row">
@@ -150,6 +151,7 @@ export default function Popup({ }: Props) {
                   mode="tags"
                   placeholder="Please select"
                   className={"listUserAsign"}
+                  value={createTask.values.listUserAsign || ""}
                   onChange={(values) => {
                     createTask.setFieldValue('listUserAsign', values);
                   }
@@ -204,6 +206,7 @@ export default function Popup({ }: Props) {
                 createTask.setFieldValue("description", cotent);
               }}
               tagName='description'
+              initialValue={createTask.values.description || ""}
               init={{
                 height: 300,
                 menubar: false,
@@ -221,8 +224,8 @@ export default function Popup({ }: Props) {
             <p className='text-danger m-0 p-0'>{createTask.errors.description}</p>
           </div>
           <div className='btnForm'>
-            <button type='submit' className='btn btn-primary mt-3'>Create New Task</button>
-            <button type='reset' className='btn mt-3' style={{ backgroundColor: '#c7c7c7', marginLeft: 10 }}>Reset Form</button>
+            <button className='btn btn-primary mt-3'>Create New Task</button>
+            {/* <button type='reset' className='btn mt-3' style={{ backgroundColor: '#c7c7c7', marginLeft: 10 }}>Reset Form</button> */}
           </div>
         </form>
       </Drawer>

@@ -11,7 +11,7 @@ import 'antd-notifications-messages/lib/styles/style.css';
 import { setVisibleEditUser } from '../../redux/reducers/modalReducer'
 import EditUser from '../../components/EditUser/EditUser'
 import { NavLink } from 'react-router-dom'
-import { history, settings } from '../../util/config'
+import { history, removeVietnameseTones, settings } from '../../util/config'
 type Props = {}
 type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
@@ -22,6 +22,7 @@ export default function User({ }: Props) {
   const { arrUser } = useSelector((state: RootState) => state.userReducer)
   const { userProfile } = useSelector((state: RootState) => state.userReducer);
   const dispatch: DispatchType = useDispatch();
+  const [arrUsersFinding, setArrUsersFinding] = useState<getUser[]>([]);
   const data: getUser[] = arrUser;
 
   const removeUserConfirmed = (userId: number) => {
@@ -88,7 +89,15 @@ export default function User({ }: Props) {
     }
   ];
 
-
+  const handleSearchUser = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = removeVietnameseTones(e.target.value);
+    const arrUserFingding = arrUser.filter((user) => {
+      if (removeVietnameseTones(user.name.toLowerCase()).search(value.toLowerCase()) != -1) {
+        return user;
+      }
+    })
+    setArrUsersFinding(arrUserFingding);
+  }
 
   useEffect(() => {
     if (!settings.getStore("accessToken")) {
@@ -102,7 +111,10 @@ export default function User({ }: Props) {
     <div className='users'>
       <div className="container">
         <h2>User List</h2>
-        <Table columns={columns} dataSource={data} rowKey={'userId'} />
+        <input type="text" className='form-control mb-3' style={{ width: 300 }} onChange={(e) => {
+          handleSearchUser(e)
+        }} />
+        <Table columns={columns} dataSource={arrUsersFinding.length >= 1 ? arrUsersFinding : data} rowKey={'userId'} />
         <EditUser />
       </div>
     </div>

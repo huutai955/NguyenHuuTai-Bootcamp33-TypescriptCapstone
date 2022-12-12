@@ -5,17 +5,11 @@ import { useSelector } from 'react-redux'
 import { DispatchType, RootState } from '../../redux/configStore'
 import { setVisible } from '../../redux/reducers/modalReducer'
 import { getDetailProjectByIdAPI } from '../../redux/reducers/projectReducer'
-import { assignUserProjectInCreateProject, removeUserProjectAPIInCreatePost } from '../../redux/reducers/userReducer'
+import { assignUserProjectInCreateProject, getUser, removeUserProjectAPIInCreatePost } from '../../redux/reducers/userReducer'
 import '../../assests/scss/components/_userlist.scss'
 
 type Props = {}
-export interface getUser {
-    userId: number;
-    name: string;
-    avatar: string;
-    email: string;
-    phoneNumber: string;
-}
+
 
 export default function AdditionalUserList({ }: Props) {
     const { visible } = useSelector((state: RootState) => state.modalReducer);
