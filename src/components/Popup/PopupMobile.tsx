@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Drawer, Modal, RadioChangeEvent, Select, SelectProps, Slider } from 'antd';
+import { Button, Modal, RadioChangeEvent, Select, SelectProps, Slider } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { DispatchType, RootState } from '../../redux/configStore';
 import { setVisible, setVisibleEditTask, setVisibleTask } from '../../redux/reducers/modalReducer';
@@ -11,6 +11,7 @@ import { getAllStatusAPI } from '../../redux/reducers/statusReducer';
 import { getAllUserAPI, getArrMembersByProjectID } from '../../redux/reducers/userReducer';
 import { useFormik, FormikProps } from 'formik';
 import * as Yup from 'yup';
+import '../../assests/scss/components/_popupmobile.scss'
 
 
 type Props = {}
@@ -23,11 +24,11 @@ type MyValue = {
   priorityId: number | string,
   listUserAsign: number[]
 };
-export default function Popup({ }: Props) {
+export default function PopupMobile({ }: Props) {
   const { visibleEditTask } = useSelector((state: RootState) => state.modalReducer);
   const { arrProject, detailProject } = useSelector((state: RootState) => state.projectReducer);
   const { arrPriority } = useSelector((state: RootState) => state.priorityReducer);
-  const { arrTask, taskDetail } = useSelector((state: RootState) => state.taskReducer);
+  const { arrTask } = useSelector((state: RootState) => state.taskReducer);
   const { arrStatus } = useSelector((state: RootState) => state.statusReducer);
   const { arrMembers } = useSelector((state: RootState) => state.userReducer);
   const dispatch: DispatchType = useDispatch();
@@ -42,7 +43,7 @@ export default function Popup({ }: Props) {
       originalEstimate: 0,
       timeTrackingSpent: 0,
       timeTrackingRemaining: 0,
-      projectId: arrProject[0]?.id,
+      projectId: arrPriority[0]?.priorityId,
       typeId: arrTask[0]?.id,
       priorityId: arrPriority[0]?.priorityId,
       listUserAsign: []
@@ -56,13 +57,12 @@ export default function Popup({ }: Props) {
         .min(1, "List user is not empty!!. If your project is not any members. Let's add some members")
     }),
     onSubmit: (values: MyValue) => {
-      // const action = createTaskAPI(values);
-      // dispatch(action)
-      // if (detailProject?.id) {
-      //   const actionDetail = getDetailProjectByIdAPI(detailProject?.id)
-      //   dispatch(actionDetail);
-      // }
-      // console.log(f)
+      const action = createTaskAPI(values);
+      dispatch(action)
+      if (detailProject?.id) {
+        const actionDetail = getDetailProjectByIdAPI(detailProject?.id)
+        dispatch(actionDetail);
+      }
     }
   })
 
@@ -72,11 +72,9 @@ export default function Popup({ }: Props) {
     dispatch(action)
   }
 
-
   const handleChangeSelect = (e: any) => {
     const actionMembers = getArrMembersByProjectID(e.target.value);
     dispatch(actionMembers);
-    console.log(e.target.value);
   }
 
 
@@ -93,25 +91,9 @@ export default function Popup({ }: Props) {
     dispatch(actionUser);
   }, [])
 
-  useEffect(() => {
-    if (arrProject[0]?.id !== undefined) {
-      const actionMembers = getArrMembersByProjectID(arrProject[0]?.id);
-      dispatch(actionMembers);
-    }
-  }, [arrProject])
-
-  console.log(arrProject[0]?.id);
-  console.log(arrMembers);
-
-
   return (
-    <div>
-      <Drawer
-        title="Create a new task"
-        width={720}
-        onClose={handleCancel}
-        open={visibleEditTask}
-        bodyStyle={{ paddingBottom: 80 }}
+    <div className='popupmobile'>
+      <Modal title="Create Task" open={visibleEditTask} onCancel={handleCancel}
       >
         <p className='text-danger' style={{ textAlign: 'right', fontWeight: 700 }}>*Only project's creator can edit or create their new task</p>
         <form className='form' onSubmit={createTask.handleSubmit}>
@@ -152,13 +134,13 @@ export default function Popup({ }: Props) {
           </div>
           <div className="form-group">
             <p>Status</p>
-            <select className='form-control' name='statusId' onChange={createTask.handleChange}>
+            <select className='form-control'>
               {arrStatus?.map((status, index) => {
                 return <option key={index} value={status.statusId}>{status.statusName}</option>
               })}
             </select>
           </div>
-          <div className="row">
+          <div className="row row__assignees">
             <div className="col-6">
               <div className="form-group">
                 <p>Assignees</p>
@@ -235,9 +217,9 @@ export default function Popup({ }: Props) {
             />
             <p className='text-danger m-0 p-0'>{createTask.errors.description}</p>
           </div>
-          <button type='submit' className='btn btn-primary mt-3'>Create New Task</button>
+          <button type='submit' className='btn btn-primary mt-3'>Submit</button>
         </form>
-      </Drawer>
+      </Modal>
     </div>
   )
 }
