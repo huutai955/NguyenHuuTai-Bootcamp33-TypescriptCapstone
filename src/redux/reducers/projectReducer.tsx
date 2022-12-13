@@ -70,10 +70,21 @@ export interface ProjectCreate {
     categoryId: number;
 }
 
+export interface ProjectUpdate {
+    projectName: string;
+    description: string;
+    categoryId: number;
+    id: number
+}
+
+
+
+
 interface ProjectState {
     arrProject: Project[],
     detailProject: DetailProject | null | undefined,
     arrCategory: CategoryProject[] | null | undefined | any,
+    arrProjectFinding: Project[]
 }
 
 
@@ -81,6 +92,7 @@ const initialState: ProjectState = {
     arrProject: [],
     detailProject: null,
     arrCategory: [],
+    arrProjectFinding: []
 }
 
 const projectReducer = createSlice({
@@ -102,7 +114,7 @@ const projectReducer = createSlice({
     }
 });
 
-export const {  setArrCategory, setArrProject, setDetailProject } = projectReducer.actions
+export const { setArrCategory, setArrProject, setDetailProject } = projectReducer.actions
 
 export default projectReducer.reducer
 
@@ -140,7 +152,7 @@ export const deleteProjectAPI = (id: number) => {
         await http.delete(`/api/Project/deleteProject?projectId=${id}`);
         const actionGetAllProject = getProjectAllAPI();
         dispatch(actionGetAllProject);
-        show("success",'Success', 'The project has deleted from list!!')
+        show("success", 'Success', 'The project has deleted from list!!')
     }
 }
 
@@ -152,7 +164,7 @@ export const updateProjectAPI = (id: number | string, data: any) => {
         swal({
             icon: "success",
             title: 'Successfully Update!!'
-          }); 
+        });
     }
 }
 
@@ -161,6 +173,23 @@ export const createProjectAPI = (value: ProjectCreate) => {
     return async (dispatch: DispatchType) => {
         await http.post(`/api/Project/createProjectAuthorize`, value);
         show('success', 'Successfully', 'Successfully Create Project')
+    }
+}
+
+
+export const findingProjectAPI = (value: string) => {
+    return async (dispatch: DispatchType) => {
+        if (value !== "") {
+            const result: any = await http.get(`/api/Project/getAllProject?keyword=${value}`);
+            const arrProject: Project[] = result.data.content;
+            const action: PayloadAction<Project[]> = setArrProject(arrProject);
+            dispatch(action);
+        }else {
+            const result: any = await http.get('/api/Project/getAllProject');
+            let arrProject: Project[] = result.data.content;
+            const action: PayloadAction<Project[]> = setArrProject(arrProject);
+            dispatch(action);
+        }
     }
 }
 

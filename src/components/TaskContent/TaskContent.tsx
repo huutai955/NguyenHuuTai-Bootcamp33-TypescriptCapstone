@@ -31,13 +31,30 @@ export default function TaskContent({ }: Props) {
         <DragDropContext onDragEnd={handleDrag}>
             <div className="row">
                 {detailProject?.lstTask.map((task, index) => {
+                    const renderStatusName = () => {
+                        if (task.statusName == 'BACKLOG') {
+                            return <div className="card-header">
+                                <p style={{ fontWeight: 500, display: 'inline', backgroundColor: '#e5e7eb', padding: "5px 10px", borderRadius: 5 }}> {task.statusName}</p>
+                            </div>
+                        } else if (task.statusName == 'SELECTED FOR DEVELOPMENT') {
+                            return <div className="card-header">
+                                <p style={{ fontWeight: 500, display: 'inline', backgroundColor: '#c7d2fe', padding: "5px 10px", borderRadius: 5 }}> {task.statusName}</p>
+                            </div>
+                        } else if (task.statusName == 'IN PROGRESS') {
+                            return <div className="card-header">
+                                <p style={{ fontWeight: 500, display: 'inline', backgroundColor: '#bfdbfe', padding: "5px 10px", borderRadius: 5 }}> {task.statusName}</p>
+                            </div>
+                        } else if (task.statusName == 'DONE') {
+                            return <div className="card-header">
+                                <p style={{ fontWeight: 500, display: 'inline', backgroundColor: '#a7f3d0', padding: "5px 10px", borderRadius: 5 }}> {task.statusName}</p>
+                            </div>
+                        }
+                    }
                     return <Droppable key={index} droppableId={task.statusId}>
                         {(provided) => {
                             return <div ref={provided.innerRef} {...provided.droppableProps} className="col-3" key={index}>
                                 <div className="card">
-                                    <div className="card-header">
-                                        {task.statusName}
-                                    </div>
+                                    {renderStatusName()}
                                     <div className="card-body" style={{ minHeight: 300 }}>
                                         {task.lstTaskDeTail?.map((detail, index) => {
                                             return <Draggable key={detail.taskId.toString()} index={index} draggableId={detail.taskId.toString()}>
@@ -57,7 +74,7 @@ export default function TaskContent({ }: Props) {
                                                         dispatch(actionPriority);
                                                     }}>
                                                         <p style={{ fontWeight: 700 }}>{detail.taskName}</p>
-                                                        <div className="body d-flex justify-content-between">
+                                                        <div className="body d-flex justify-content-between align-items-center">
                                                             <p>{detail.priorityTask.priority}</p>
                                                             <div className="member">
                                                                 <Avatar.Group maxCount={2} key={index}>

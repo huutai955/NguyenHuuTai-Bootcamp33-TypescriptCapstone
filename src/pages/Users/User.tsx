@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux'
 import { DispatchType, RootState } from '../../redux/configStore'
-import { getAllUserAPI, getUser, getUserByIdAPI, removeUserAPI } from '../../redux/reducers/userReducer'
+import { findingUserAPI, getAllUserAPI, getUser, getUserByIdAPI, removeUserAPI } from '../../redux/reducers/userReducer'
 import { notification, Popconfirm, Popover, Space, Table, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
@@ -47,13 +47,15 @@ export default function User({ }: Props) {
       title: 'Name',
       render: (value, record): any => {
         return <NavLink to={`/userinfor/${record.userId}`}>{record.name}</NavLink>
-      }
+      },
+      sorter: (a, b) => a.name.length - b.name.length
     },
     {
       title: 'Email',
       dataIndex: 'email',
       key: 'email',
-      responsive: ['lg']
+      responsive: ['lg'],
+      sorter: (a, b) => a.email.length - b.email.length
     },
     {
       title: 'Phone Number',
@@ -90,13 +92,8 @@ export default function User({ }: Props) {
   ];
 
   const handleSearchUser = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let value = removeVietnameseTones(e.target.value);
-    const arrUserFingding = arrUser.filter((user) => {
-      if (removeVietnameseTones(user.name.toLowerCase()).search(value.toLowerCase()) != -1) {
-        return user;
-      }
-    })
-    setArrUsersFinding(arrUserFingding);
+    const action = findingUserAPI(e.target.value)
+    dispatch(action);
   }
 
   useEffect(() => {
@@ -108,10 +105,11 @@ export default function User({ }: Props) {
     }
   }, [])
   return (
-    <div className='users'>
+    <div className='users' style={{padding: 70}}>
       <div className="container">
+        <p style={{ fontWeight: 700 }}>Jira Project / <span style={{ color: '#e53935' }}>User List</span></p>
         <h2>User List</h2>
-        <input type="text" className='form-control mb-3' style={{ width: 300 }} onChange={(e) => {
+        <input type="text" className='form-control mb-3' placeholder='Enter the name you need to find!!' style={{ width: 300 }} onChange={(e) => {
           handleSearchUser(e)
         }} />
         <Table columns={columns} dataSource={arrUsersFinding.length >= 1 ? arrUsersFinding : data} rowKey={'userId'} />

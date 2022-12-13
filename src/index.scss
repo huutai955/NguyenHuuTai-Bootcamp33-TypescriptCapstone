@@ -1,4 +1,4 @@
-// Vì dùng antd có một số chỗ bị đụng css nên em tách một số file scss khi file đó dùng antd
+// Vì dùng antd có một số chỗ bị đụng css nên em import một số file scss thẳng vào component nào dùng antd
 @import './assests/scss/templates/firsttemplate';
 @import './assests/scss/templates/secondtemplate';
 @import './assests/scss/pages/register';

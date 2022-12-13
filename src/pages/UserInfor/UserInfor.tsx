@@ -70,20 +70,20 @@ export default function UserInfor({ }: Props) {
 
     return (
         <>
-            <Row className='p-3'>
-                <Col style={{ textAlign: 'center' }} xs={24} lg={4} >
+            <Row  style={{paddingTop: 70}}>
+                <Col style={{ textAlign: 'center' }} xs={24} lg={6} xxl={4}>
                     <Image
                         width={100}
                         src={userInfor[0]?.avatar}
                         style={{ borderRadius: '50%' }}
                     />
+                    <h4 className='mt-3'>{updateUser.values.name}</h4>
                 </Col>
-                <Col style={{}} xs={24} lg={20}>
+                <Col style={{}} xs={24} lg={18} xxl={20}>
                     <form className='form m-4' onSubmit={updateUser.handleSubmit}>
                         <div className="form-group  mb-3">
                             <p className='m-0'>User ID</p>
                             <input type="text" className='form-control' disabled value={updateUser.values.id || ""} onChange={updateUser.handleChange} />
-
                         </div>
                         <div className="form-group  mb-3" >
                             <p className='m-0'>Name</p>

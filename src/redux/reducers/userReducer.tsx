@@ -186,6 +186,24 @@ export const getAllUserAPI = () => {
   }
 }
 
+export const findingUserAPI = (value: string) => {
+  return async (dispatch: DispatchType) => {
+    if (value !== "") {
+      const result: any = await http.get(`/api/Users/getUser?keyword=${value}`)
+      const user: getUser[] = result.data.content;
+      const action: PayloadAction<getUser[]> = setArrUser(user);
+      dispatch(action)
+    } else {
+      const result: any = await http.get(`/api/Users/getUser`)
+      const user: getUser[] = result.data.content;
+      const action: PayloadAction<getUser[]> = setArrUser(user);
+      dispatch(action)
+    }
+  }
+}
+
+
+
 
 export const assignUserProject = (projectID: number, userID: number) => {
   return async (dispatch: DispatchType) => {

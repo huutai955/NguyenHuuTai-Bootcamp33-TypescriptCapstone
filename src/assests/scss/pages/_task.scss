@@ -1,9 +1,10 @@
+@import '../../scss/themes/variable';
+
 .task {
-    width: calc(100% - 200px);
-    margin: 0 auto;
     @media screen and (max-width: 576px) {
         width: 100%;
     }
+
     .container {
 
         .task__content {
@@ -12,14 +13,53 @@
 
                 .col-3 {
 
+
                     @media screen and (min-width: 577px) and (max-width: 992px) {
                         width: 50%;
+                        margin-bottom: 15px;
+                    }
+
+                    @media screen and (min-width: 993px) and (max-width: 1280px) {
+                        width: calc(100%/3);
                         margin-bottom: 15px;
                     }
 
                     @media screen and (max-width: 576px) {
                         width: 100%;
                         margin-bottom: 15px;
+                    }
+
+                    .card {
+                        @media screen and (max-width: 577px) {
+                            border: none;
+                        }
+
+                        .card-header {
+                            @media screen and (max-width: 577px) {
+                                background-color: $bg-c1-color;
+                                border: none;
+                            }
+
+                            p {
+                                @media screen and (min-width: 993px) and (max-width: 1302px) {
+                                    font-size: 13px;
+                                }
+                            }
+                        }
+
+                        .card-body {
+                            @media screen and (min-width: 577px) and (max-width: 992px) {
+                                min-height: 75px !important;
+                            }
+
+                            @media screen and (max-width: 577px) {
+                                min-height: 75px !important;
+                            }
+
+                            @media screen and (max-width: 577px) {
+                                background-color: $bg-c1-color;
+                            }
+                        }
                     }
                 }
             }

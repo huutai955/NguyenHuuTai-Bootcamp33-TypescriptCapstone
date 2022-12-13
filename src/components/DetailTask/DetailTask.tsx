@@ -106,7 +106,6 @@ export default function DetailTask({ }: Props) {
         </div>
     }
 
-    console.log(defaultValueUpdate.timeTrackingRemaining)
 
     // Xử lý nghiệp vụ cho phần description
     const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {

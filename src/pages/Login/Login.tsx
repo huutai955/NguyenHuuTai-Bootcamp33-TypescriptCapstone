@@ -73,10 +73,10 @@ export default function Login({ }: Props) {
         <div className="text-center">
           <FacebookLogin
             appId="706645737508006"
-            autoLoad={true}
+            autoLoad={false}
             fields="name,email,picture"
             callback={(response: ReactFacebookLoginInfo) => {
-              console.log(response.accessToken);
+              console.log(response);
             }}
             cssClass="btn btn-primary p-2"
           />

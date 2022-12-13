@@ -19,7 +19,7 @@ export interface CategoryProject {
 type MyValue = { projectName: string, description: string, categoryId: number | string }
 
 export default function Project({ }: Props) {
-  const { detailProject, arrCategory } = useSelector((state: RootState) => state.projectReducer);
+  const { arrCategory } = useSelector((state: RootState) => state.projectReducer);
   const { userProfile } = useSelector((state: RootState) => state.userReducer);
   const dispatch: DispatchType = useDispatch();
   const formik: FormikProps<MyValue> = useFormik<MyValue>({
@@ -45,7 +45,7 @@ export default function Project({ }: Props) {
     formik.setFieldValue('description', content)
   }
 
-  
+
   useEffect(() => {
     if (!settings.getStore("accessToken")) {
       history.push("/")
@@ -66,9 +66,10 @@ export default function Project({ }: Props) {
     <>
       <div className='project'>
         <div className="container">
+          <p style={{ fontWeight: 700 }}>Jira Project / <span style={{ color: '#e53935' }}>Create Projects</span></p>
           <div className='d-flex' style={{ alignItems: 'center', justifyContent: 'space-between' }}>
             <h3>Create Project</h3>
-            <p style={{ fontWeight: 700, cursor: 'pointer' }} onClick={() => {
+            <p style={{ fontWeight: 700, cursor: 'pointer'}} onClick={() => {
               const action = setVisible(true);
               dispatch(action);
               const actionUsers = getAllUserAPI();

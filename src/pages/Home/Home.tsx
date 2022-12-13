@@ -3,13 +3,12 @@ import { Space, Table, Tag, Avatar, Tooltip, Popconfirm, Button, Popover, AutoCo
 import type { ColumnsType } from 'antd/es/table/interface';
 import { useDispatch, useSelector } from 'react-redux';
 import { DispatchType, RootState } from '../../redux/configStore';
-import { deleteProjectAPI, getDetailProjectByIdAPI, getProjectAllAPI } from '../../redux/reducers/projectReducer';
+import { deleteProjectAPI, findingProjectAPI, getDetailProjectByIdAPI, getProjectAllAPI, Project } from '../../redux/reducers/projectReducer';
 import { EditOutlined, DeleteOutlined, UserOutlined, UserAddOutlined } from '@ant-design/icons'
 import EditProject from '../../components/EditProject/EditProject';
 import swal from 'sweetalert';
 import { assignUserProject, getUserAPI, removeUserProjectAPI } from '../../redux/reducers/userReducer';
 import { setVisible } from '../../redux/reducers/modalReducer';
-import { Formik } from 'formik';
 import { NavLink } from 'react-router-dom';
 import '../../assests/scss/pages/_home.scss'
 import { history, settings } from '../../util/config';
@@ -65,6 +64,12 @@ export default function Home({ }: Props) {
     dispatch(action);
   }
 
+  // Xử lý nghiệp vụ tìm project
+  const handleSearchProject = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const action  = findingProjectAPI(e.target.value);
+    dispatch(action);    
+  }
+
   useEffect(() => {
     if (!settings.getStore("accessToken")) {
       history.push("/")
@@ -105,6 +110,24 @@ export default function Home({ }: Props) {
       key: 'categoryName',
       responsive: ['lg'],
       sorter: (a, b) => a.categoryName.length - b.categoryName.length,
+      filters: [
+        {
+          text: 'Dự án web',
+          value: 'Dự án web',
+        },
+        {
+          text: 'Dự án phần mềm',
+          value: 'Dự án phần mềm',
+        },
+        {
+          text: 'Dự án di động',
+          value: 'Dự án di động',
+        },
+      ],
+      filterSearch: true,
+      onFilter: (value, record): any => {
+        return record.categoryName.startsWith(value.toString())
+      }
     },
     {
       title: 'Creator',
@@ -114,7 +137,6 @@ export default function Home({ }: Props) {
         return <Tag color='green' key={index}>{record.creator.name}</Tag>
       },
       sorter: (a, b) => a.creator.name.length - b.creator.name.length,
-
     },
     {
       title: 'Member',
@@ -196,10 +218,11 @@ export default function Home({ }: Props) {
               }}
             />
           }} trigger="click">
-            <span style={{ color: '#e53935', fontSize: 20, cursor: 'pointer',}}><UserAddOutlined /></span>
+            <span style={{ color: '#e53935', fontSize: 20, cursor: 'pointer', }}><UserAddOutlined /></span>
           </Popover>
         </div>
-      }}
+      }
+    }
     ,
     {
       title: 'Action',
@@ -228,11 +251,15 @@ export default function Home({ }: Props) {
 
 
   return (
-    <div className="home" style={{paddingTop: 70}}>
+    <div className="home" style={{ paddingTop: 70 }}>
       <div className='container'>
-        <p style={{fontWeight: 700}}>Jira Project / <span style={{color: '#e53935'}}>Projects</span></p>
+        <p style={{ fontWeight: 700 }}>Jira Project / <span style={{ color: '#e53935' }}>All Projects</span></p>
         <h2>Projects</h2>
+        <input type="text" className='form-control mb-3' placeholder='Enter the project name you need to find!!' style={{ width: 350 }} onChange={(e) => {
+          handleSearchProject(e)
+        }} />
         <Table columns={columns} rowKey={"id"} dataSource={data} />
+        
         <EditProject />
       </div >
     </div>

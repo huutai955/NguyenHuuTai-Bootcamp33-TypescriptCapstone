@@ -38,8 +38,8 @@ export default function Task({ }: Props) {
         <div className="task" style={{ paddingTop: 100 }}>
             <div className='container'>
                 <h2>Task Detail: {detailProject?.projectName}</h2>
-                <div className="task__members d-flex mb-3">
-                    <h3 style={{ marginRight: 50 }}>Members</h3>
+                <div className="task__members d-flex mb-3" style={{justifyContent: 'space-between'}}>
+                    <h3 style={{ marginRight: 50, marginBottom: 0 }}>Members</h3>
                     <div className="task__membersAvatar d-flex" style={{ alignItems: 'center' }}>
                         <Avatar.Group maxCount={3}>
                             {detailProject?.members?.map((user, index) => {

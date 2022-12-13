@@ -3,7 +3,7 @@ import { Space, Table, Tag, Avatar, Tooltip, Popconfirm, Button, Popover, AutoCo
 import type { ColumnsType } from 'antd/es/table/interface';
 import { useDispatch, useSelector } from 'react-redux';
 import { DispatchType, RootState } from '../../redux/configStore';
-import { deleteProjectAPI, getDetailProjectByIdAPI, getProjectAllAPI } from '../../redux/reducers/projectReducer';
+import { deleteProjectAPI, findingProjectAPI, getDetailProjectByIdAPI, getProjectAllAPI } from '../../redux/reducers/projectReducer';
 import { EditOutlined, DeleteOutlined, UserOutlined, UserAddOutlined } from '@ant-design/icons'
 import EditProject from '../../components/EditProject/EditProject';
 import swal from 'sweetalert';
@@ -64,6 +64,13 @@ export default function Home({ }: Props) {
   const deleteProject = (id: number) => {
     const action = deleteProjectAPI(id);
     dispatch(action);
+  }
+
+  
+  // Xử lý nghiệp vụ tìm project
+  const handleSearchProject = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const action  = findingProjectAPI(e.target.value);
+    dispatch(action);    
   }
 
   useEffect(() => {
@@ -139,7 +146,7 @@ export default function Home({ }: Props) {
           })}
           </Avatar.Group>
           {record.members.length >= 1 ? <Popover placement="bottom" title={'User List'} content={content} trigger="click">
-            <span><EditOutlined  style={{ fontSize: 15, color: '#1e88e5' }} /></span>
+            <span><EditOutlined style={{ fontSize: 15, color: '#1e88e5' }} /></span>
           </Popover> : ''}
           <Popover placement="bottom" title={'User List'} content={() => {
             return <AutoComplete style={{ width: '100%' }} onSearch={(value) => {
@@ -200,6 +207,11 @@ export default function Home({ }: Props) {
   return (
     <div className="homeMobile">
       <div className='container'>
+        <p style={{ fontWeight: 700 }}>Jira Project / <span style={{ color: '#e53935' }}>Projects</span></p>
+        <h2>Projects</h2>
+        <input type="text" className='form-control mb-3' placeholder='Enter the project name you need to find!!' style={{ width: 350 }} onChange={(e) => {
+          handleSearchProject(e)
+        }} />
         <Table columns={columns} style={{ padding: 0 }} rowKey={"id"} dataSource={data} />
         <EditProjectMobile />
       </div >
