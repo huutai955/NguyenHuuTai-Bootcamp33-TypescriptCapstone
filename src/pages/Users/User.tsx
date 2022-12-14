@@ -11,9 +11,10 @@ import 'antd-notifications-messages/lib/styles/style.css';
 import { setVisibleEditUser } from '../../redux/reducers/modalReducer'
 import EditUser from '../../components/EditUser/EditUser'
 import { NavLink } from 'react-router-dom'
-import { history, removeVietnameseTones, settings } from '../../util/config'
+import { history, settings } from '../../util/config'
+import '../../assests/scss/pages/_users.scss'
 type Props = {}
-type NotificationType = 'success' | 'info' | 'warning' | 'error';
+
 
 
 
