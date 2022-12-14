@@ -6,7 +6,6 @@ import { findingUserAPI, getAllUserAPI, getUser, getUserByIdAPI, removeUserAPI }
 import { notification, Popconfirm, Popover, Space, Table, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
-import { NotificationPlacement } from 'antd/lib/notification'
 import 'antd-notifications-messages/lib/styles/style.css';
 import { setVisibleEditUser } from '../../redux/reducers/modalReducer'
 import EditUser from '../../components/EditUser/EditUser'
