@@ -107,7 +107,7 @@ export default function EditProject({ }: Props) {
                         content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
                     }}
                 />
-                <p className='text-danger'>{formik.errors.categoryId || formik.errors.description || formik.errors.projectName}</p>
+                <p  className='text-danger'>{formik.errors.categoryId || formik.errors.description || formik.errors.projectName}</p>
                 <Space style={{ marginTop: 50 }} className="d-flex justify-content-end">
                     <Button onClick={onClose}>Cancel</Button>
                     <button type='submit' className='btn btn-primary' style={{padding: '4.1px 15px', border: '1px solid #fff', borderRadius: 'unset', fontSize: 14}}>

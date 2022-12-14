@@ -55,7 +55,7 @@ export default function EditUser({ }: Props) {
         dispatch(action);
     }
     return (
-        <Modal title="Edit User" open={visibleEditUser} onCancel={handleCancel}>
+        <Modal closable={true} title="Edit User" open={visibleEditUser} onCancel={handleCancel}>
             <form className='form' onSubmit={updateUser.handleSubmit}>
                 <div className="form-group">
                     <p className='m-0'>User ID</p>

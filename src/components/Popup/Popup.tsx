@@ -90,7 +90,7 @@ export default function Popup({ }: Props) {
   }, [arrProject])
 
   return (
-    <div>
+    <div >
       <Drawer
         title="Create a new task"
         width={720}
@@ -225,7 +225,6 @@ export default function Popup({ }: Props) {
           </div>
           <div className='btnForm'>
             <button className='btn btn-primary mt-3'>Create New Task</button>
-            {/* <button type='reset' className='btn mt-3' style={{ backgroundColor: '#c7c7c7', marginLeft: 10 }}>Reset Form</button> */}
           </div>
         </form>
       </Drawer>

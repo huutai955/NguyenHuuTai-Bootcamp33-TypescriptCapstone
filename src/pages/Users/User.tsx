@@ -68,7 +68,7 @@ export default function User({ }: Props) {
       key: 'action',
       render: (value, record): any => {
         return <div>
-          <span style={{ cursor: 'pointer', marginRight: 10 }}><EditOutlined onClick={() => {
+          <span style={{ cursor: 'pointer', marginRight: 10, fontSize: 18, color: 'blue' }}><EditOutlined onClick={() => {
             const action = setVisibleEditUser(true);
             dispatch(action);
             const actionUser = getUserByIdAPI(record.userId);
@@ -84,7 +84,7 @@ export default function User({ }: Props) {
             okText="Yes"
             cancelText="No"
           >
-            <span style={{ cursor: 'pointer', color: 'red' }}><DeleteOutlined /></span>
+            <span style={{ cursor: 'pointer', color: 'red', fontSize: 18 }}><DeleteOutlined /></span>
           </Popconfirm>
         </div>
       }
@@ -112,7 +112,7 @@ export default function User({ }: Props) {
         <input type="text" className='form-control mb-3' placeholder='Enter the name you need to find!!' style={{ width: 300 }} onChange={(e) => {
           handleSearchUser(e)
         }} />
-        <Table columns={columns} dataSource={arrUsersFinding.length >= 1 ? arrUsersFinding : data} rowKey={'userId'} />
+        <Table columns={columns} dataSource={data} rowKey={'userId'} />
         <EditUser />
       </div>
     </div>

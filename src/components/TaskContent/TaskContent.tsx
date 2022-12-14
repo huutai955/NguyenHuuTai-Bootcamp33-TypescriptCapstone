@@ -56,7 +56,15 @@ export default function TaskContent({ }: Props) {
                                 <div className="card">
                                     {renderStatusName()}
                                     <div className="card-body" style={{ minHeight: 300 }}>
+                                        
                                         {task.lstTaskDeTail?.map((detail, index) => {
+                                            const renderPriority = () => {
+                                                if (detail.priorityTask.priority === 'High' || detail.priorityTask.priority === 'Medium') {
+                                                    return <p style={{fontWeight: 500, color: 'red'}}>{detail.priorityTask.priority}</p>
+                                                }else if (detail.priorityTask.priority === 'Low' || detail.priorityTask.priority === 'Lowest') {
+                                                    return <p style={{fontWeight: 500, color: 'rgb(79, 173, 230)'}}>{detail.priorityTask.priority}</p>
+                                                }
+                                            }
                                             return <Draggable key={detail.taskId.toString()} index={index} draggableId={detail.taskId.toString()}>
                                                 {(provided) => {
                                                     return <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className="card p-2 mb-3" key={index} onClick={() => {
@@ -74,8 +82,14 @@ export default function TaskContent({ }: Props) {
                                                         dispatch(actionPriority);
                                                     }}>
                                                         <p style={{ fontWeight: 700 }}>{detail.taskName}</p>
-                                                        <div className="body d-flex justify-content-between align-items-center">
-                                                            <p>{detail.priorityTask.priority}</p>
+                                                        <div className="body d-flex justify-content-between align-items-center" style={{marginTop: 10}}>
+                                                            <div className='d-flex'>
+                                                                {detail.taskTypeDetail.id === 1 ?
+                                                                     <i className="fa-solid fa-exclamation" style={{padding: '3px 9px', borderRadius: '50%', marginRight: 10, backgroundColor: 'rgb(228, 77, 66)', color: '#ffffff'}}></i>
+                                                                     :  <i className='fa fa-bookmark' style={{fontSize: 20, marginRight: 10, color: 'rgb(79, 173, 230)' }} />
+                                                                }
+                                                                {renderPriority()}
+                                                            </div>
                                                             <div className="member">
                                                                 <Avatar.Group maxCount={2} key={index}>
                                                                     {detail.assigness.map((avatar: any, index: number) => {

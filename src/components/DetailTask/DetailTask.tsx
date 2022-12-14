@@ -8,6 +8,7 @@ import { setVisibleTask } from '../../redux/reducers/modalReducer'
 import { deleteTaskAPI, updateTaskDetailAPI } from '../../redux/reducers/taskReducer'
 import { addCommentAPI, commentContent, deleteCommentAPI, getAllCommentAPI, updateCommentAPI } from '../../redux/reducers/commentReducer'
 import '../../assests/scss/components/_detailtask.scss'
+import { WarningOutlined } from '@ant-design/icons'
 const { Panel } = Collapse;
 const { Option } = Select;
 type Props = {}
@@ -127,7 +128,6 @@ export default function DetailTask({ }: Props) {
     }
 
 
-
     useEffect(() => {
         setDefaultValueUpdate({
             listUserAsign: taskDetail?.assigness.map((assignes) => {
@@ -151,19 +151,30 @@ export default function DetailTask({ }: Props) {
             <Modal
                 title={<div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <div className="task-title d-flex" style={{ alignItems: 'center' }}>
-                        <i className='fa fa-bookmark' style={{ marginRight: 10 }} />
-                        <select className='form-control' value={taskDetail?.typeId || ''} onChange={(e) => {
-                            const valueUpdate = {
-                                ...defaultValueUpdate,
-                                typeId: e.target.value
-                            }
-                            const action = updateTaskDetailAPI(valueUpdate, Number(taskDetail?.projectId), Number(taskDetail?.taskId));
-                            dispatch(action);
-                        }}>
-                            {arrTask.map((task, index) => {
-                                return <option key={index} value={task.id}>{task.taskType}</option>
+                        {taskDetail?.typeId === 1 ?
+                            <i className="fa-solid fa-exclamation" style={{padding: '3px 9px', borderRadius: '50%', marginRight: 5, backgroundColor: 'rgb(228, 77, 66)', color: '#ffffff'}}></i>
+                            :  <i className='fa fa-bookmark' style={{fontSize: 20, marginRight: 10, color: 'rgb(79, 173, 230)' }} />
+                        }
+
+                        <Select
+                            labelInValue
+                            value={{ value: taskDetail?.typeId, label: taskDetail?.taskTypeDetail.taskType }}
+                            style={{ width: 120 }}
+                            onChange={(e) => {
+                                const valueUpdate = {
+                                    ...defaultValueUpdate,
+                                    typeId: e.value
+                                }
+                                const action = updateTaskDetailAPI(valueUpdate, Number(taskDetail?.projectId), Number(taskDetail?.taskId));
+                                dispatch(action);
+                            }}
+                            options={arrTask.map((task, index) => {
+                                return {
+                                    value: task.id,
+                                    label: task.taskType
+                                }
                             })}
-                        </select>
+                        />
                     </div>
                     <div className="d-flex" style={{ marginRight: 20 }}>
                         <Popconfirm placement="bottom" title={'Are you sure to delete this task?'} onConfirm={deleteConfirm} okText="Yes" cancelText="No">
