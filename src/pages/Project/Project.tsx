@@ -30,9 +30,9 @@ export default function Project({ }: Props) {
     },
     validationSchema: Yup.object().shape({
       projectName: Yup.string()
-        .required("Vui lòng nhập tên dự án!!"),
+        .required("Project name is not empty!!"),
       description: Yup.string()
-        .required("Vui lòng nhập nội dung!!")
+        .required("Description is not empty!!")
     }),
     onSubmit: (values: any) => {
       const action = createProjectAPI(values);
