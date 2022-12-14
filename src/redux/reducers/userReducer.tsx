@@ -83,14 +83,6 @@ const userReducer = createSlice({
       const userProfile: userProfile | null = action.payload;
       state.userProfile = userProfile;
     },
-    setMessageSignUp: (state: UserState, action: PayloadAction<string>) => {
-      const message: string = action.payload;
-      state.messageSignUp = message;
-      swal({
-        title: state.messageSignUp,
-        icon: "success",
-      });
-    },
     setGetUser: (state: UserState, action: PayloadAction<getUser[]>) => {
       const getUser: getUser[] = action.payload;
       state.arrGetUser = getUser;
@@ -110,7 +102,7 @@ const userReducer = createSlice({
   }
 });
 
-export const { setUserInfor, setArrMembers, setArrUser, setGetUser, setMessageSignUp, setUserProfile } = userReducer.actions
+export const { setUserInfor, setArrMembers, setArrUser, setGetUser, setUserProfile } = userReducer.actions
 
 export default userReducer.reducer;
 
@@ -157,11 +149,18 @@ export const postSigninAPI = (user: Account) => {
 
 export const postSignUpAPI = (account: AccountSignUp) => {
   return async (dispatch: DispatchType) => {
-    const result: any = await http.post('/api/Users/signup', account);
-    const message: string = result.data.message;
-    const action: PayloadAction<string> = setMessageSignUp(message);
-    dispatch(action);
-    history.push('/')
+    try {
+     await http.post('/api/Users/signup', account);
+      swal({
+        title: "Successfully sign up!!",
+        icon: "success",
+      });
+      history.push('/')
+    } catch (err: any) {
+      if (err.response.data.message === "Email đã được sử dụng!") {
+        show("error", "Error", "The email was registered!!")
+      }
+    }
   }
 }
 
