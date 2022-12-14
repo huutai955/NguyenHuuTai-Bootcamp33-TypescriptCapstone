@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Drawer, Modal, RadioChangeEvent, Select, SelectProps, Slider } from 'antd';
+import {  Drawer,  Select, Slider } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { DispatchType, RootState } from '../../redux/configStore';
-import { setVisible, setVisibleEditTask, setVisibleTask } from '../../redux/reducers/modalReducer';
+import {  setVisibleEditTask } from '../../redux/reducers/modalReducer';
 import { Editor } from '@tinymce/tinymce-react'
-import { getDetailProjectByIdAPI, getProjectAllAPI } from '../../redux/reducers/projectReducer';
-import { getAllPriorityAPI } from '../../redux/reducers/priorityReducer';
-import { createTaskAPI, getAllTaskAPI } from '../../redux/reducers/taskReducer';
-import { getAllStatusAPI } from '../../redux/reducers/statusReducer';
-import { getAllUserAPI, getArrMembersByProjectID } from '../../redux/reducers/userReducer';
+import { getDetailProjectByIdAPI } from '../../redux/reducers/projectReducer';
+import { createTaskAPI } from '../../redux/reducers/taskReducer';
+import { getArrMembersByProjectID } from '../../redux/reducers/userReducer';
 import { useFormik, FormikProps } from 'formik';
 import * as Yup from 'yup';
 
@@ -27,7 +25,7 @@ export default function Popup({ }: Props) {
   const { visibleEditTask } = useSelector((state: RootState) => state.modalReducer);
   const { arrProject, detailProject } = useSelector((state: RootState) => state.projectReducer);
   const { arrPriority } = useSelector((state: RootState) => state.priorityReducer);
-  const { arrTask, taskDetail } = useSelector((state: RootState) => state.taskReducer);
+  const { arrTask } = useSelector((state: RootState) => state.taskReducer);
   const { arrStatus } = useSelector((state: RootState) => state.statusReducer);
   const { arrMembers } = useSelector((state: RootState) => state.userReducer);
   const dispatch: DispatchType = useDispatch();

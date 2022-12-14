@@ -75,9 +75,7 @@ export default function Login({ }: Props) {
             appId="706645737508006"
             autoLoad={false}
             fields="name,email,picture"
-            callback={(response: ReactFacebookLoginInfo) => {
-              console.log(response);
-            }}
+            callback={responseFacebook}
             cssClass="btn btn-primary p-2"
           />
         </div>
