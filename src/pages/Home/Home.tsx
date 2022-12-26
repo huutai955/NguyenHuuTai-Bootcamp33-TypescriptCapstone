@@ -10,7 +10,6 @@ import swal from 'sweetalert';
 import { assignUserProject, getUserAPI, removeUserProjectAPI } from '../../redux/reducers/userReducer';
 import { setVisible } from '../../redux/reducers/modalReducer';
 import { NavLink } from 'react-router-dom';
-import '../../assests/scss/pages/_home.scss'
 import { history, settings } from '../../util/config';
 
 type Props = {}
@@ -90,6 +89,8 @@ export default function Home({ }: Props) {
   }, [userProfile])
 
 
+
+  // Table content
   const columns: ColumnsType<DataType> = [
     {
       title: 'ID',

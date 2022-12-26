@@ -1,12 +1,9 @@
 // Vì dùng antd có một số chỗ bị đụng css nên em import một số file scss thẳng vào component nào dùng antd
 @import './assests/scss/templates/firsttemplate';
-@import './assests/scss/templates/secondtemplate';
 @import './assests/scss/pages/register';
-@import './assests/scss/pages/login';
-@import './assests/scss/pages/home';
 @import './assests/scss/pages/project';
+@import './assests/scss/pages/login';
 @import './assests/scss/components/headermobile';
-@import './assests/scss/components/_header';
 
 
 

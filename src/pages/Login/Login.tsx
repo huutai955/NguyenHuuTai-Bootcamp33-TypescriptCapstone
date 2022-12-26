@@ -6,6 +6,7 @@ import { postSigninAPI } from '../../redux/reducers/userReducer';
 import { NavLink } from 'react-router-dom';
 import * as Yup from 'yup';
 import FacebookLogin from 'react-facebook-login';
+import swal from 'sweetalert';
 export interface ReactFacebookLoginInfo {
   id: string;
   userID: string;
@@ -48,6 +49,11 @@ export default function Login({ }: Props) {
 
   const responseFacebook = (response: ReactFacebookLoginInfo) => {
     console.log(response.accessToken);
+    swal({
+      title: 'Error',
+      icon: 'error',
+      text: 'This feature is being updated. Please try again'
+    })
   }
 
   return (
