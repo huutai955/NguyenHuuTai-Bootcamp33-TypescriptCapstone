@@ -139,6 +139,7 @@ export const postSigninAPI = (user: Account) => {
       settings.setStorageJson(USER_PROFILE, result.data.content);
       history.push('/projects')
     } catch (err: any) {
+      console.log(err)
       swal({
         icon: 'error',
         title: 'Have something wrong.Check your email or password again!!'
@@ -157,9 +158,10 @@ export const postSignUpAPI = (account: AccountSignUp) => {
       });
       history.push('/')
     } catch (err: any) {
-      if (err.response.data.message === "Email đã được sử dụng!") {
-        show("error", "Error", "The email was registered!!")
-      }
+      // if (err.response.data.message === "Email đã được sử dụng!") {
+      //   show("error", "Error", "The email was registered!!")
+      // }
+      console.log(err)
     }
   }
 }

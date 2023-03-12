@@ -7,6 +7,7 @@ import { NavLink } from 'react-router-dom';
 import * as Yup from 'yup';
 import FacebookLogin from 'react-facebook-login';
 import swal from 'sweetalert';
+import { ACCESSTOKEN, USER_PROFILE } from '../../util/config';
 export interface ReactFacebookLoginInfo {
   id: string;
   userID: string;
@@ -55,6 +56,11 @@ export default function Login({ }: Props) {
       text: 'This feature is being updated. Please try again'
     })
   }
+
+  React.useEffect(() => {
+    localStorage.removeItem(ACCESSTOKEN)
+    localStorage.removeItem(USER_PROFILE)
+  }, [])
 
   return (
     <div className='login'>

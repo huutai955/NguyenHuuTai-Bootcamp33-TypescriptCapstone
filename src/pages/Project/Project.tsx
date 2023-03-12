@@ -62,6 +62,7 @@ export default function Project({ }: Props) {
   }, [userProfile])
 
 
+  
   return (
     <>
       <div className='project'>
@@ -123,3 +124,4 @@ export default function Project({ }: Props) {
     </>
   )
 }
+
